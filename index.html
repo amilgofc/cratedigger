@@ -6,783 +6,215 @@
 <title>CRATEDIGGER — Amil G</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&display=swap');
-
-  :root {
-    --bg: #0a0a0a;
-    --surface: #111111;
-    --surface2: #1a1a1a;
-    --border: #2a2a2a;
-    --accent: #e8ff00;
-    --accent2: #ff4d00;
-    --text: #e0e0e0;
-    --muted: #666;
-    --green: #00e87a;
-    --red: #ff3355;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    line-height: 1.5;
-    min-height: 100vh;
-  }
-
-  /* HEADER */
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 24px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    letter-spacing: 4px;
-    color: var(--accent);
-    text-shadow: 0 0 20px rgba(232,255,0,0.3);
-  }
-
-  .logo span { color: var(--muted); font-size: 12px; display: block; letter-spacing: 6px; margin-top: -4px; }
-
-  .nav {
-    display: flex;
-    gap: 4px;
-  }
-
-  .nav-btn {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 6px 16px;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    cursor: pointer;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: all 0.15s;
-  }
-
-  .nav-btn:hover, .nav-btn.active {
-    background: var(--accent);
-    color: var(--bg);
-    border-color: var(--accent);
-    font-weight: 700;
-  }
-
-  /* LAYOUT */
-  .app { display: flex; height: calc(100vh - 57px); }
-
-  .sidebar {
-    width: 280px;
-    min-width: 280px;
-    border-right: 1px solid var(--border);
-    background: var(--surface);
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .main {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px 24px;
-  }
-
-  /* SIDEBAR */
-  .sidebar-section {
-    border-bottom: 1px solid var(--border);
-    padding: 16px;
-  }
-
-  .sidebar-title {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 12px;
-    font-weight: 700;
-  }
-
-  .stat-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-  }
-
-  .stat-row:last-child { border: none; }
-
-  .stat-label { color: var(--muted); font-size: 11px; }
-  .stat-val { color: var(--accent); font-weight: 700; font-size: 12px; }
-
-  .label-chip {
-    display: inline-flex;
-    align-items: center;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    padding: 3px 8px;
-    font-size: 10px;
-    margin: 2px;
-    cursor: pointer;
-    transition: all 0.15s;
-    letter-spacing: 1px;
-  }
-
-  .label-chip:hover, .label-chip.active {
-    background: var(--accent);
-    color: var(--bg);
-    border-color: var(--accent);
-    font-weight: 700;
-  }
-
-  .label-chip .count {
-    margin-left: 4px;
-    opacity: 0.6;
-    font-size: 9px;
-  }
-
-  /* VIEWS */
-  .view { display: none; }
-  .view.active { display: block; }
-
-  /* COLLECTION */
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 3px;
-    color: var(--text);
-  }
-
-  .section-subtitle { color: var(--muted); font-size: 11px; margin-top: 2px; }
-
-  .controls {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .search-box {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 8px 12px;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    width: 240px;
-    outline: none;
-  }
-
-  .search-box:focus { border-color: var(--accent); }
-
-  .filter-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 6px 12px;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    cursor: pointer;
-    letter-spacing: 1px;
-    transition: all 0.15s;
-  }
-
-  .filter-btn:hover, .filter-btn.active {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  /* TABLE */
-  .table-wrap { overflow-x: auto; }
-
-  table { width: 100%; border-collapse: collapse; }
-
-  th {
-    text-align: left;
-    padding: 8px 12px;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    white-space: nowrap;
-    user-select: none;
-  }
-
-  th:hover { color: var(--accent); }
-
-  td {
-    padding: 8px 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-size: 12px;
-    vertical-align: middle;
-  }
-
-  tr:hover td { background: rgba(232,255,0,0.04); }
-
-  .track-title { font-weight: 700; color: var(--text); max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-artist { color: var(--muted); max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-label { color: var(--muted); font-size: 11px; }
-  .track-year { color: var(--muted); font-size: 11px; }
-
-  .tag {
-    display: inline-block;
-    padding: 2px 7px;
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin: 1px;
-    border: 1px solid;
-  }
-
-  .tag-warmup { border-color: #4488ff; color: #4488ff; background: rgba(68,136,255,0.08); }
-  .tag-peak { border-color: var(--accent2); color: var(--accent2); background: rgba(255,77,0,0.08); }
-  .tag-closing { border-color: var(--green); color: var(--green); background: rgba(0,232,122,0.08); }
-  .tag-ref { border-color: var(--accent); color: var(--accent); background: rgba(232,255,0,0.08); }
-  .tag-vinyl { border-color: #aa88ff; color: #aa88ff; background: rgba(170,136,255,0.08); }
-  .tag-digital { border-color: #44ccff; color: #44ccff; background: rgba(68,204,255,0.08); }
-
-  .actions { display: flex; gap: 4px; }
-
-  .icon-btn {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    width: 26px;
-    height: 26px;
-    cursor: pointer;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-  }
-
-  .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .icon-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(232,255,0,0.1); }
-
-  /* BAR CHART */
-  .bar-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
-  .bar-label { width: 60px; font-size: 10px; color: var(--muted); text-align: right; flex-shrink: 0; }
-  .bar-track { flex: 1; height: 12px; background: var(--surface2); position: relative; }
-  .bar-fill { height: 100%; background: var(--accent); transition: width 0.4s; }
-  .bar-val { width: 28px; font-size: 10px; color: var(--accent); font-weight: 700; }
-
-  /* TASTE PROFILE */
-  .profile-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-
-  .profile-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 16px;
-  }
-
-  .profile-card-title {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 12px;
-    font-weight: 700;
-  }
-
-  .north-star {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-
-  .north-star:last-child { border: none; }
-  .north-star:hover { background: rgba(232,255,0,0.04); }
-
-  .star-icon { color: var(--accent); font-size: 14px; flex-shrink: 0; }
-  .star-info { flex: 1; min-width: 0; }
-  .star-title { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .star-sub { font-size: 10px; color: var(--muted); }
-
-  /* DISCOVER */
-  .discover-form {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 20px;
-    margin-bottom: 20px;
-  }
-
-  .form-row {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-  }
-
-  .form-group { flex: 1; min-width: 160px; }
-  .form-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; display: block; }
-
-  select, textarea {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 8px 10px;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    width: 100%;
-    outline: none;
-  }
-
-  select:focus, textarea:focus { border-color: var(--accent); }
-
-  .submit-btn {
-    background: var(--accent);
-    border: none;
-    color: var(--bg);
-    padding: 10px 24px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    letter-spacing: 3px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .submit-btn:hover { background: var(--accent2); color: #fff; }
-  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  /* RESULT CARDS */
-  .results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 12px;
-  }
-
-  .result-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 16px;
-    transition: border-color 0.15s;
-    position: relative;
-  }
-
-  .result-card:hover { border-color: var(--accent); }
-
-  .result-num {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px;
-    color: rgba(255,255,255,0.06);
-    line-height: 1;
-  }
-
-  .result-title { font-weight: 700; font-size: 13px; margin-bottom: 2px; padding-right: 30px; }
-  .result-meta { color: var(--muted); font-size: 11px; margin-bottom: 10px; }
-  .result-why { font-size: 11px; color: var(--text); line-height: 1.6; margin-bottom: 12px; border-left: 2px solid var(--accent); padding-left: 10px; }
-
-  .result-links { display: flex; gap: 6px; flex-wrap: wrap; }
-
-  .result-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 10px;
-    border: 1px solid var(--border);
-    font-size: 10px;
-    color: var(--muted);
-    text-decoration: none;
-    letter-spacing: 1px;
-    transition: all 0.15s;
-    cursor: pointer;
-    background: none;
-    font-family: 'Space Mono', monospace;
-  }
-
-  .result-link:hover { border-color: var(--accent); color: var(--accent); }
-
-  .feedback-btns { display: flex; gap: 4px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
-
-  .fb-btn {
-    flex: 1;
-    padding: 6px;
-    border: 1px solid var(--border);
-    background: none;
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .fb-btn:hover.yes { border-color: var(--green); color: var(--green); background: rgba(0,232,122,0.08); }
-  .fb-btn:hover.no { border-color: var(--red); color: var(--red); background: rgba(255,51,85,0.08); }
-  .fb-btn:hover.maybe { border-color: #ffaa00; color: #ffaa00; background: rgba(255,170,0,0.08); }
-  .fb-btn.voted { opacity: 0.5; pointer-events: none; }
-
-  /* LOADING */
-  .loading {
-    display: none;
-    padding: 40px;
-    text-align: center;
-    color: var(--muted);
-  }
-
-  .loading.active { display: block; }
-
-  .spinner {
-    width: 32px;
-    height: 32px;
-    border: 2px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 16px;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .loading-text { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; animation: pulse 1.5s ease-in-out infinite; }
-  @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
-
-  /* PAGINATION */
-  .pagination { display: flex; gap: 4px; margin-top: 16px; align-items: center; }
-  .page-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 5px 10px;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .page-btn:hover, .page-btn.active { border-color: var(--accent); color: var(--accent); }
-  .page-info { color: var(--muted); font-size: 11px; margin: 0 8px; }
-
-  /* TAG MODAL */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .modal-overlay.active { display: flex; }
-
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 24px;
-    width: 440px;
-    max-width: 90vw;
-  }
-
-  .modal-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    letter-spacing: 3px;
-    margin-bottom: 16px;
-    color: var(--accent);
-  }
-
-  .modal-track { font-size: 12px; color: var(--muted); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-
-  .tag-group { margin-bottom: 16px; }
-  .tag-group-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-
-  .tag-options { display: flex; flex-wrap: wrap; gap: 4px; }
-
-  .tag-opt {
-    padding: 5px 12px;
-    border: 1px solid var(--border);
-    font-size: 11px;
-    cursor: pointer;
-    transition: all 0.15s;
-    background: none;
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    letter-spacing: 1px;
-  }
-
-  .tag-opt:hover { border-color: var(--accent); color: var(--accent); }
-  .tag-opt.selected { background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 700; }
-
-  .modal-actions { display: flex; gap: 8px; margin-top: 20px; }
-  .modal-btn {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid var(--border);
-    background: none;
-    color: var(--text);
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    cursor: pointer;
-    letter-spacing: 1px;
-    transition: all 0.15s;
-  }
-  .modal-btn.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 700; }
-  .modal-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .modal-btn.primary:hover { background: var(--accent2); border-color: var(--accent2); color: #fff; }
-
-  /* FEEDBACK LOG */
-  .log-entry {
-    display: flex;
-    gap: 12px;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-size: 11px;
-  }
-  .log-verdict { font-weight: 700; width: 60px; flex-shrink: 0; }
-  .log-verdict.yes { color: var(--green); }
-  .log-verdict.no { color: var(--red); }
-  .log-verdict.maybe { color: #ffaa00; }
-  .log-track { color: var(--muted); }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 4px; height: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); }
-  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-  .badge {
-    display: inline-block;
-    background: var(--accent);
-    color: var(--bg);
-    font-size: 10px;
-    font-weight: 700;
-    padding: 1px 6px;
-    margin-left: 6px;
-    vertical-align: middle;
-  }
-
-  .empty-state {
-    padding: 60px 20px;
-    text-align: center;
-    color: var(--muted);
-  }
-
-  .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
-  .empty-state p { font-size: 12px; letter-spacing: 1px; }
-
-  .bpm-bar { display: flex; align-items: center; gap: 4px; }
-  .bpm-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: 0.5; }
-  .bpm-dot.active { opacity: 1; }
-
-  /* ============================================================
-     RESPONSIVE / MOBILE
-  ============================================================ */
-
-  /* Bottom nav bar — mobile only */
-  .bottom-nav {
-    display: none;
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    z-index: 150;
-    padding: 0;
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
-  .bottom-nav-inner {
-    display: flex;
-    height: 56px;
-  }
-
-  .bnav-btn {
-    flex: 1;
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    transition: color 0.15s;
-    padding: 0;
-    border-right: 1px solid var(--border);
-  }
-
-  .bnav-btn:last-child { border-right: none; }
-  .bnav-btn.active { color: var(--accent); }
-  .bnav-btn .bnav-icon { font-size: 18px; line-height: 1; }
-
-  /* Filter drawer — slides up from bottom on mobile */
-  .filter-drawer {
-    display: none;
-    position: fixed;
-    bottom: 56px; left: 0; right: 0;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    z-index: 140;
-    max-height: 70vh;
-    overflow-y: auto;
-    transform: translateY(100%);
-    transition: transform 0.25s ease;
-  }
-
-  .filter-drawer.open {
-    transform: translateY(0);
-  }
-
-  .filter-drawer-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    background: var(--surface);
-  }
-
-  .filter-drawer-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    letter-spacing: 3px;
-    color: var(--accent);
-  }
-
-  .drawer-close {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    width: 32px; height: 32px;
-    cursor: pointer;
-    font-size: 16px;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  /* Overlay behind drawer */
-  .drawer-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    z-index: 130;
-  }
-
-  .drawer-overlay.active { display: block; }
-
-  @media (max-width: 700px) {
-
-    /* Hide desktop nav and sidebar */
-    .nav { display: none; }
-    .sidebar { display: none; }
-
-    /* Show bottom nav */
-    .bottom-nav { display: block; }
-
-    /* Logo smaller */
-    .logo { font-size: 20px; letter-spacing: 2px; }
-    .logo span { font-size: 9px; letter-spacing: 3px; }
-    .header { padding: 10px 16px; }
-
-    /* App layout — full width, bottom padding for nav bar */
-    .app { height: auto; min-height: calc(100vh - 49px); }
-    .main {
-      padding: 12px 12px 80px 12px;
-      overflow-y: visible;
-      height: auto;
-    }
-
-    /* Section headers stack vertically */
-    .section-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-    }
-
-    /* Search full width */
-    .search-box { width: 100%; }
-
-    /* Controls wrap tightly */
-    .controls { gap: 6px; }
-    .filter-btn { padding: 8px 10px; font-size: 10px; }
-
-    /* Table — hide less important columns, make touch-friendly */
-    td, th { padding: 10px 8px; }
-    .track-title { max-width: 140px; }
-    .track-artist { max-width: 100px; }
-
-    /* Hide format column on mobile */
-    .col-format { display: none; }
-
-    /* Icon buttons — bigger touch targets */
-    .icon-btn { width: 36px; height: 36px; font-size: 14px; }
-
-    /* Profile grid — single column */
-    .profile-grid { grid-template-columns: 1fr; }
-
-    /* Discover form — all full width */
-    .form-group { min-width: 100%; }
-    .form-row { flex-direction: column; gap: 10px; }
-
-    /* DIG button — full width on mobile */
-    .submit-btn {
-      width: 100%;
-      font-size: 22px;
-      padding: 14px;
-      text-align: center;
-    }
-
-    /* Result cards — single column */
-    .results-grid { grid-template-columns: 1fr; }
-
-    /* Feedback buttons — bigger */
-    .fb-btn { padding: 10px 6px; font-size: 11px; }
-
-    /* Modal — full screen on mobile */
-    .modal { width: 100vw; max-width: 100vw; padding: 20px 16px; border-left: none; border-right: none; border-bottom: none; position: fixed; bottom: 0; }
-    .modal-overlay.active { align-items: flex-end; }
-
-    /* Proxy banner input full width */
-    #proxyUrlInput { width: 100%; min-width: unset; }
-
-    /* Log entries stack */
-    .log-entry { flex-direction: column; gap: 4px; }
-    .log-verdict { width: auto; }
-
-    /* Hide scrollbar on mobile */
-    ::-webkit-scrollbar { width: 0; height: 0; }
+  :root{--bg:#0a0a0a;--surface:#111111;--surface2:#1a1a1a;--border:#2a2a2a;--accent:#e8ff00;--accent2:#ff4d00;--text:#e0e0e0;--muted:#666;--green:#00e87a;--red:#ff3355}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;font-size:13px;line-height:1.5;min-height:100vh}
+  .header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:100}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:var(--accent);text-shadow:0 0 20px rgba(232,255,0,0.3)}
+  .logo span{color:var(--muted);font-size:12px;display:block;letter-spacing:6px;margin-top:-4px}
+  .nav{display:flex;gap:4px}
+  .nav-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 16px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all 0.15s}
+  .nav-btn:hover,.nav-btn.active{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700}
+  .app{display:flex;height:calc(100vh - 57px)}
+  .sidebar{width:280px;min-width:280px;border-right:1px solid var(--border);background:var(--surface);overflow-y:auto;display:flex;flex-direction:column}
+  .main{flex:1;overflow-y:auto;padding:20px 24px}
+  .sidebar-section{border-bottom:1px solid var(--border);padding:16px}
+  .sidebar-title{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;font-weight:700}
+  .stat-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+  .stat-row:last-child{border:none}
+  .stat-label{color:var(--muted);font-size:11px}
+  .stat-val{color:var(--accent);font-weight:700;font-size:12px}
+  .label-chip{display:inline-flex;align-items:center;background:var(--surface2);border:1px solid var(--border);padding:3px 8px;font-size:10px;margin:2px;cursor:pointer;transition:all 0.15s;letter-spacing:1px}
+  .label-chip:hover,.label-chip.active{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700}
+  .label-chip .count{margin-left:4px;opacity:0.6;font-size:9px}
+  .view{display:none}.view.active{display:block}
+  .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+  .section-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--text)}
+  .section-subtitle{color:var(--muted);font-size:11px;margin-top:2px}
+  .controls{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+  .search-box{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 12px;font-family:'Space Mono',monospace;font-size:12px;width:240px;outline:none}
+  .search-box:focus{border-color:var(--accent)}
+  .filter-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:6px 12px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;letter-spacing:1px;transition:all 0.15s}
+  .filter-btn:hover,.filter-btn.active{border-color:var(--accent);color:var(--accent)}
+  .table-wrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;padding:8px 12px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap;user-select:none}
+  th:hover{color:var(--accent)}
+  td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px;vertical-align:middle}
+  tr:hover td{background:rgba(232,255,0,0.04)}
+  .track-title{font-weight:700;color:var(--text);max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .track-artist{color:var(--muted);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .track-label{color:var(--muted);font-size:11px}
+  .track-year{color:var(--muted);font-size:11px}
+  .tag{display:inline-block;padding:2px 7px;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin:1px;border:1px solid}
+  .tag-warmup{border-color:#4488ff;color:#4488ff;background:rgba(68,136,255,0.08)}
+  .tag-peak{border-color:var(--accent2);color:var(--accent2);background:rgba(255,77,0,0.08)}
+  .tag-closing{border-color:var(--green);color:var(--green);background:rgba(0,232,122,0.08)}
+  .tag-ref{border-color:var(--accent);color:var(--accent);background:rgba(232,255,0,0.08)}
+  .tag-vinyl{border-color:#aa88ff;color:#aa88ff;background:rgba(170,136,255,0.08)}
+  .tag-digital{border-color:#44ccff;color:#44ccff;background:rgba(68,204,255,0.08)}
+  .actions{display:flex;gap:4px}
+  .icon-btn{background:none;border:1px solid var(--border);color:var(--muted);width:28px;height:28px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;text-decoration:none;flex-shrink:0}
+  .icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .icon-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(232,255,0,0.1)}
+  .bar-row{display:flex;align-items:center;gap:8px;margin:4px 0}
+  .bar-label{width:80px;font-size:10px;color:var(--muted);text-align:right;flex-shrink:0}
+  .bar-track{flex:1;height:12px;background:var(--surface2)}
+  .bar-fill{height:100%;background:var(--accent);transition:width 0.4s}
+  .bar-val{width:28px;font-size:10px;color:var(--accent);font-weight:700}
+  .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+  .profile-card{background:var(--surface);border:1px solid var(--border);padding:16px}
+  .profile-card-title{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;font-weight:700}
+  .north-star{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+  .north-star:last-child{border:none}
+  .star-icon{color:var(--accent);font-size:14px;flex-shrink:0}
+  .star-info{flex:1;min-width:0}
+  .star-title{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .star-sub{font-size:10px;color:var(--muted)}
+  .discover-form{background:var(--surface);border:1px solid var(--border);padding:20px;margin-bottom:20px}
+  .form-row{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+  .form-group{flex:1;min-width:160px}
+  .form-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:block}
+  select,textarea{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-family:'Space Mono',monospace;font-size:12px;width:100%;outline:none}
+  select:focus,textarea:focus{border-color:var(--accent)}
+  .submit-btn{background:var(--accent);border:none;color:var(--bg);padding:10px 24px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;transition:all 0.15s}
+  .submit-btn:hover{background:var(--accent2);color:#fff}
+  .submit-btn:disabled{opacity:0.4;cursor:not-allowed}
+  .results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+  .result-card{background:var(--surface);border:1px solid var(--border);padding:16px;transition:border-color 0.15s;position:relative}
+  .result-card:hover{border-color:var(--accent)}
+  .result-num{position:absolute;top:12px;right:12px;font-family:'Bebas Neue',sans-serif;font-size:32px;color:rgba(255,255,255,0.06);line-height:1}
+  .result-title{font-weight:700;font-size:13px;margin-bottom:2px;padding-right:30px}
+  .result-meta{color:var(--muted);font-size:11px;margin-bottom:10px}
+  .result-why{font-size:11px;color:var(--text);line-height:1.6;margin-bottom:12px;border-left:2px solid var(--accent);padding-left:10px}
+  .result-links{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+  .result-link{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border:1px solid var(--border);font-size:10px;color:var(--muted);text-decoration:none;letter-spacing:1px;transition:all 0.15s;background:none;font-family:'Space Mono',monospace}
+  .result-link:hover{border-color:var(--accent);color:var(--accent)}
+  .result-link.spotify{border-color:rgba(30,215,96,0.3);color:#1ED760}
+  .result-link.spotify:hover{background:rgba(30,215,96,0.1)}
+  .result-link.youtube{border-color:rgba(255,0,0,0.3);color:#ff4444}
+  .result-link.youtube:hover{background:rgba(255,0,0,0.08)}
+  .result-link.discogs{border-color:rgba(232,255,0,0.2);color:var(--accent)}
+  .result-link.discogs:hover{background:rgba(232,255,0,0.06)}
+  .feedback-btns{display:flex;gap:4px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+  .fb-btn{flex:1;padding:8px 6px;border:1px solid var(--border);background:none;color:var(--muted);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all 0.15s}
+  .fb-btn.voted{opacity:0.5;pointer-events:none}
+  .btn-save-track{width:100%;padding:8px;margin-top:6px;border:1px solid var(--accent);background:rgba(232,255,0,0.06);color:var(--accent);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer;transition:all 0.15s;text-transform:uppercase}
+  .btn-save-track:hover{background:var(--accent);color:var(--bg)}
+  .btn-save-track.saved{border-color:var(--green);color:var(--green);background:rgba(0,232,122,0.08)}
+  .loading{display:none;padding:40px;text-align:center;color:var(--muted)}
+  .loading.active{display:block}
+  .spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-text{font-size:11px;letter-spacing:3px;text-transform:uppercase;animation:pulse 1.5s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
+  .pagination{display:flex;gap:4px;margin-top:16px;align-items:center}
+  .page-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:5px 10px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;transition:all 0.15s}
+  .page-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .page-info{color:var(--muted);font-size:11px;margin:0 8px}
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center}
+  .modal-overlay.active{display:flex}
+  .modal{background:var(--surface);border:1px solid var(--border);padding:24px;width:440px;max-width:90vw}
+  .modal-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;margin-bottom:16px;color:var(--accent)}
+  .modal-track{font-size:12px;color:var(--muted);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+  .tag-group{margin-bottom:16px}
+  .tag-group-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .tag-options{display:flex;flex-wrap:wrap;gap:4px}
+  .tag-opt{padding:5px 12px;border:1px solid var(--border);font-size:11px;cursor:pointer;transition:all 0.15s;background:none;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:1px}
+  .tag-opt:hover{border-color:var(--accent);color:var(--accent)}
+  .tag-opt.selected{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700}
+  .modal-actions{display:flex;gap:8px;margin-top:20px}
+  .modal-btn{flex:1;padding:8px;border:1px solid var(--border);background:none;color:var(--text);font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;letter-spacing:1px;transition:all 0.15s}
+  .modal-btn.primary{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700}
+  .modal-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .modal-btn.primary:hover{background:var(--accent2);border-color:var(--accent2);color:#fff}
+  .log-entry{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:11px}
+  .log-verdict{font-weight:700;width:60px;flex-shrink:0}
+  .log-verdict.yes{color:var(--green)}
+  .log-verdict.no{color:var(--red)}
+  .log-verdict.maybe{color:#ffaa00}
+  .log-track{color:var(--muted);flex:1}
+  ::-webkit-scrollbar{width:4px;height:4px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--border)}
+  ::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+  .badge{display:inline-block;background:var(--accent);color:var(--bg);font-size:10px;font-weight:700;padding:1px 6px;margin-left:6px;vertical-align:middle}
+  .empty-state{padding:60px 20px;text-align:center;color:var(--muted)}
+  .empty-state .icon{font-size:48px;margin-bottom:16px;opacity:0.3}
+  .empty-state p{font-size:12px;letter-spacing:1px}
+  /* PROXY BANNER */
+  .proxy-banner{background:var(--surface);border:1px solid var(--accent2);padding:16px;margin-bottom:16px}
+  .proxy-banner.hidden{display:none}
+  .proxy-banner-title{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent2);margin-bottom:8px;font-weight:700}
+  /* EXPAND TRACKS */
+  .expand-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;padding:4px 0;font-family:'Space Mono',monospace;letter-spacing:1px}
+  .expand-btn:hover{color:var(--accent)}
+  .track-list{display:none;padding:8px 0 0 16px}
+  .track-list.open{display:block}
+  .track-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.03);font-size:11px}
+  .track-item:last-child{border:none}
+  .track-item-title{flex:1;color:var(--text)}
+  .track-item-links{display:flex;gap:4px}
+  .mini-link{padding:2px 6px;border:1px solid var(--border);font-size:9px;color:var(--muted);text-decoration:none;transition:all 0.12s}
+  .mini-link:hover{border-color:var(--accent);color:var(--accent)}
+  .mini-link.sp{border-color:rgba(30,215,96,0.25);color:#1ED760}
+  .mini-link.yt{border-color:rgba(255,68,68,0.25);color:#ff4444}
+  /* PLAYLIST */
+  .playlist-card{background:var(--surface);border:1px solid var(--border);padding:16px;margin-bottom:12px}
+  .playlist-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--accent);margin-bottom:4px}
+  .playlist-meta{font-size:10px;color:var(--muted);margin-bottom:12px}
+  .playlist-track-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:11px}
+  .playlist-track-row:last-child{border:none}
+  /* SYNC STATUS */
+  .sync-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--muted);margin-right:6px;vertical-align:middle}
+  .sync-dot.synced{background:var(--green)}
+  .sync-dot.syncing{background:#ffaa00;animation:pulse 1s infinite}
+  /* MOBILE */
+  .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:150;padding-bottom:env(safe-area-inset-bottom)}
+  .bottom-nav-inner{display:flex;height:56px}
+  .bnav-btn{flex:1;background:none;border:none;color:var(--muted);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:color 0.15s;padding:0;border-right:1px solid var(--border)}
+  .bnav-btn:last-child{border-right:none}
+  .bnav-btn.active{color:var(--accent)}
+  .bnav-icon{font-size:18px;line-height:1}
+  .filter-drawer{display:none;position:fixed;bottom:56px;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:140;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform 0.25s ease}
+  .filter-drawer.open{transform:translateY(0)}
+  .filter-drawer-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface)}
+  .filter-drawer-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:var(--accent)}
+  .drawer-close{background:none;border:1px solid var(--border);color:var(--muted);width:32px;height:32px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+  .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:130}
+  .drawer-overlay.active{display:block}
+  @media(max-width:700px){
+    .nav{display:none}
+    .sidebar{display:none}
+    .bottom-nav{display:block}
+    .filter-drawer{display:block}
+    .logo{font-size:20px;letter-spacing:2px}
+    .logo span{font-size:9px;letter-spacing:3px}
+    .header{padding:10px 16px}
+    .app{height:auto;min-height:calc(100vh - 49px)}
+    .main{padding:12px 12px 80px 12px;overflow-y:visible;height:auto}
+    .section-header{flex-direction:column;align-items:flex-start;gap:8px}
+    .search-box{width:100%}
+    .controls{gap:6px}
+    .filter-btn{padding:8px 10px;font-size:10px}
+    td,th{padding:10px 8px}
+    .track-title{max-width:140px}
+    .track-artist{max-width:100px}
+    .col-format{display:none}
+    .icon-btn{width:36px;height:36px;font-size:14px}
+    .profile-grid{grid-template-columns:1fr}
+    .form-group{min-width:100%}
+    .form-row{flex-direction:column;gap:10px}
+    .submit-btn{width:100%;font-size:22px;padding:14px;text-align:center}
+    .results-grid{grid-template-columns:1fr}
+    .fb-btn{padding:10px 6px;font-size:11px}
+    .modal{width:100vw;max-width:100vw;padding:20px 16px;border-left:none;border-right:none;border-bottom:none;position:fixed;bottom:0}
+    .modal-overlay.active{align-items:flex-end}
+    #proxyUrlInput{width:100%;min-width:unset}
+    .log-entry{flex-direction:column;gap:4px}
+    .log-verdict{width:auto}
+    ::-webkit-scrollbar{width:0;height:0}
+    .playlist-card{padding:12px}
   }
 </style>
 </head>
@@ -795,115 +227,79 @@
     <button class="nav-btn" onclick="showView('discover',this,'bnav-discover')">DISCOVER</button>
     <button class="nav-btn" onclick="showView('profile',this,'bnav-profile')">SMAAKPROFIEL</button>
     <button class="nav-btn" onclick="showView('feedback',this,'bnav-feedback')">FEEDBACK LOG</button>
+    <button class="nav-btn" onclick="showView('playlists',this,'bnav-playlists')">PLAYLISTS</button>
   </nav>
 </div>
 
 <div class="app">
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-section">
-      <div class="sidebar-title">Stats Collectie</div>
+      <div class="sidebar-title">Stats</div>
       <div class="stat-row"><span class="stat-label">DJ-Club platen</span><span class="stat-val">264</span></div>
       <div class="stat-row"><span class="stat-label">Spotify tracks</span><span class="stat-val">588</span></div>
       <div class="stat-row"><span class="stat-label">Gem. BPM</span><span class="stat-val">127.6</span></div>
-      <div class="stat-row"><span class="stat-label">Piek periode</span><span class="stat-val">1994–96</span></div>
-      <div class="stat-row"><span class="stat-label">Top genre</span><span class="stat-val">ACID HOUSE</span></div>
+      <div class="stat-row"><span class="stat-label">Sync</span><span class="stat-val"><span class="sync-dot" id="syncDot"></span><span id="syncStatus">—</span></span></div>
     </div>
-
     <div class="sidebar-section">
       <div class="sidebar-title">Filter op Label</div>
       <div id="labelFilters"></div>
     </div>
-
     <div class="sidebar-section">
       <div class="sidebar-title">Filter op Periode</div>
       <div id="yearFilters"></div>
     </div>
-
     <div class="sidebar-section">
       <div class="sidebar-title">Tags</div>
       <div>
-        <span class="label-chip filter-tag" data-tag="warmup" onclick="toggleTagFilter('warmup')">Warm-up <span class="count"></span></span>
-        <span class="label-chip filter-tag" data-tag="peak" onclick="toggleTagFilter('peak')">Peak <span class="count"></span></span>
-        <span class="label-chip filter-tag" data-tag="closing" onclick="toggleTagFilter('closing')">Closing <span class="count"></span></span>
-        <span class="label-chip filter-tag" data-tag="vinyl" onclick="toggleTagFilter('vinyl')">Vinyl</span>
-        <span class="label-chip filter-tag" data-tag="digital" onclick="toggleTagFilter('digital')">Digitaal</span>
-        <span class="label-chip filter-tag" data-tag="ref" onclick="toggleTagFilter('ref')">Referentie</span>
+        <span class="label-chip filter-tag" data-tag="warmup" onclick="toggleTagFilter('warmup',this)">Warm-up</span>
+        <span class="label-chip filter-tag" data-tag="peak" onclick="toggleTagFilter('peak',this)">Peak</span>
+        <span class="label-chip filter-tag" data-tag="closing" onclick="toggleTagFilter('closing',this)">Closing</span>
+        <span class="label-chip filter-tag" data-tag="vinyl" onclick="toggleTagFilter('vinyl',this)">Vinyl</span>
+        <span class="label-chip filter-tag" data-tag="digital" onclick="toggleTagFilter('digital',this)">Digitaal</span>
+        <span class="label-chip filter-tag" data-tag="ref" onclick="toggleTagFilter('ref',this)">Referentie</span>
       </div>
     </div>
   </aside>
 
-  <!-- MAIN -->
   <main class="main">
-
-    <!-- COLLECTION VIEW -->
+    <!-- COLLECTION -->
     <div class="view active" id="view-collection">
       <div class="section-header">
         <div>
-          <div class="section-title">VINYLCOLLECTIE <span class="badge" id="collectionCount">264</span></div>
-          <div class="section-subtitle">Discogs DJ-Club folder • Gefilterd op jouw smaakprofiel</div>
+          <div class="section-title">COLLECTIE <span class="badge" id="collectionCount">—</span></div>
+          <div class="section-subtitle">Discogs DJ-Club • Spotify • Opgeslagen tracks</div>
         </div>
-        <div style="display:flex;gap:8px">
-          <button class="filter-btn active" onclick="switchSource('discogs', this)">DISCOGS</button>
-          <button class="filter-btn" onclick="switchSource('spotify', this)">SPOTIFY</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="filter-btn active" id="srcDiscogs" onclick="switchSource('discogs',this)">DISCOGS</button>
+          <button class="filter-btn" id="srcSpotify" onclick="switchSource('spotify',this)">SPOTIFY</button>
+          <button class="filter-btn" id="srcSaved" onclick="switchSource('saved',this)">OPGESLAGEN</button>
         </div>
       </div>
-
       <div class="controls">
-        <input class="search-box" type="text" placeholder="Zoek artiest, titel, label..." oninput="filterCollection(this.value)" id="searchBox">
-        <button class="filter-btn active" data-sort="dateAdded" onclick="sortBy('dateAdded', this)">RECENT</button>
-        <button class="filter-btn" data-sort="year" onclick="sortBy('year', this)">JAAR</button>
-        <button class="filter-btn" data-sort="artist" onclick="sortBy('artist', this)">ARTIEST</button>
-        <button class="filter-btn" data-sort="bpm" onclick="sortBy('bpm', this)" id="bpmSortBtn" style="display:none">BPM</button>
+        <input class="search-box" type="text" placeholder="Zoek artiest, titel, label..." oninput="filterCollection(this.value)">
+        <button class="filter-btn active" data-sort="dateAdded" onclick="sortBy('dateAdded',this)">RECENT</button>
+        <button class="filter-btn" data-sort="year" onclick="sortBy('year',this)">JAAR</button>
+        <button class="filter-btn" data-sort="artist" onclick="sortBy('artist',this)">ARTIEST</button>
+        <button class="filter-btn" data-sort="bpm" id="bpmSortBtn" onclick="sortBy('bpm',this)" style="display:none">BPM</button>
       </div>
-
-      <div class="table-wrap">
-        <table id="collectionTable">
-          <thead id="tableHead"></thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-
+      <div class="table-wrap"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div>
       <div class="pagination" id="pagination"></div>
     </div>
 
-    <!-- DISCOVER VIEW -->
+    <!-- DISCOVER -->
     <div class="view" id="view-discover">
       <div class="section-header">
-        <div>
-          <div class="section-title">DISCOVER</div>
-          <div class="section-subtitle">AI-curator met web search via Cloudflare Worker proxy</div>
-        </div>
+        <div><div class="section-title">DISCOVER</div><div class="section-subtitle">AI-curator met web search via Cloudflare Worker proxy</div></div>
       </div>
-
-      <!-- PROXY SETUP BANNER -->
-      <div id="proxyBanner" style="background:var(--surface);border:1px solid var(--accent2);padding:16px;margin-bottom:16px">
-        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent2);margin-bottom:8px;font-weight:700">⚙ EENMALIGE SETUP VEREIST</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:12px">
-          Deploy de gratis Cloudflare Worker (instructies in het meegeleverde .js bestand) en plak je Worker URL hieronder. Eenmalig — daarna onthouden.
-        </div>
+      <div class="proxy-banner" id="proxyBanner">
+        <div class="proxy-banner-title">⚙ CLOUDFLARE WORKER URL</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:12px">Vul eenmalig je Worker URL in. Wordt gesynchroniseerd over al je toestellen.</div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <input id="proxyUrlInput" class="search-box" style="flex:1;min-width:260px;width:auto" type="text"
-            placeholder="https://cratedigger-proxy.jounaam.workers.dev">
+          <input id="proxyUrlInput" class="search-box" style="flex:1;min-width:260px;width:auto" type="text" placeholder="https://cratedigger-proxy.jounaam.workers.dev">
           <button class="filter-btn" style="border-color:var(--accent);color:var(--accent);padding:8px 16px" onclick="saveProxyUrl()">OPSLAAN</button>
         </div>
         <div id="proxyStatus" style="font-size:10px;margin-top:8px;color:var(--muted)"></div>
       </div>
-
-      <!-- PROXY SETUP BANNER -->
-      <div id="proxyBanner" style="background:var(--surface);border:1px solid var(--accent2);padding:16px;margin-bottom:16px">
-        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent2);margin-bottom:8px;font-weight:700">⚙ EENMALIGE SETUP VEREIST</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:12px">
-          Deploy de gratis Cloudflare Worker (zie meegeleverd <strong style="color:var(--text)">cratedigger-worker.js</strong> bestand) en plak je Worker URL hieronder. Eenmalig — daarna onthouden.
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <input id="proxyUrlInput" class="search-box" style="flex:1;min-width:260px;width:auto" type="text"
-            placeholder="https://cratedigger-proxy.jounaam.workers.dev">
-          <button class="filter-btn" style="border-color:var(--accent);color:var(--accent);padding:8px 16px" onclick="saveProxyUrl()">OPSLAAN</button>
-        </div>
-        <div id="proxyStatus" style="font-size:10px;margin-top:8px;color:var(--muted)"></div>
-      </div>
-
       <div class="discover-form">
         <div class="form-row">
           <div class="form-group">
@@ -932,7 +328,7 @@
             <label class="form-label">Modus</label>
             <select id="discoverMode">
               <option value="similar">Vergelijkbaar met collectie</option>
-              <option value="adjacent">Randbewegingen / verrassend</option>
+              <option value="adjacent">Grensgebieden / verrassend</option>
               <option value="labels">Via labels uit collectie</option>
               <option value="network">Via producersnetwerk</option>
             </select>
@@ -946,80 +342,50 @@
         </div>
         <button class="submit-btn" id="discoverBtn" onclick="runDiscover()">DIG</button>
       </div>
-
-      <div class="loading" id="discoverLoading">
-        <div class="spinner"></div>
-        <div class="loading-text">Zoeken op het web...</div>
-      </div>
-
+      <div class="loading" id="discoverLoading"><div class="spinner"></div><div class="loading-text">Zoeken op het web via proxy...</div></div>
       <div id="discoverResults"></div>
     </div>
 
-    <!-- PROFILE VIEW -->
+    <!-- PROFILE -->
     <div class="view" id="view-profile">
       <div class="section-header">
-        <div>
-          <div class="section-title">SMAAKPROFIEL</div>
-          <div class="section-subtitle">Automatisch gedestilleerd uit 264 Discogs platen + 588 Spotify tracks</div>
-        </div>
+        <div><div class="section-title">SMAAKPROFIEL</div><div class="section-subtitle">Gedestilleerd uit 264 Discogs platen + 588 Spotify tracks</div></div>
       </div>
-
       <div class="profile-grid">
-        <div class="profile-card">
-          <div class="profile-card-title">Toplabels (Discogs)</div>
-          <div id="topLabels"></div>
-        </div>
-        <div class="profile-card">
-          <div class="profile-card-title">Topgenres (Spotify)</div>
-          <div id="topGenres"></div>
-        </div>
-        <div class="profile-card">
-          <div class="profile-card-title">BPM Verdeling</div>
-          <div id="bpmDist"></div>
-        </div>
-        <div class="profile-card">
-          <div class="profile-card-title">Audio DNA (Spotify)</div>
-          <div id="audioDna"></div>
-        </div>
+        <div class="profile-card"><div class="profile-card-title">Toplabels (Discogs)</div><div id="topLabels"></div></div>
+        <div class="profile-card"><div class="profile-card-title">Topgenres (Spotify)</div><div id="topGenres"></div></div>
+        <div class="profile-card"><div class="profile-card-title">BPM Verdeling</div><div id="bpmDist"></div></div>
+        <div class="profile-card"><div class="profile-card-title">Audio DNA</div><div id="audioDna"></div></div>
       </div>
-
       <div class="profile-card" style="margin-bottom:16px">
-        <div class="profile-card-title">North Star Tracks — Jouw smaakankerpunten</div>
-        <div class="section-subtitle" style="margin-bottom:12px; font-size:11px; color:var(--muted)">
-          Klik ⭐ in de collectie om tracks toe te voegen als referentie. Deze worden meegestuurd bij elke discover-sessie.
-        </div>
-        <div id="northStars">
-          <div class="empty-state" style="padding:20px">
-            <div class="icon">⭐</div>
-            <p>Nog geen north stars. Klik ⭐ bij tracks in je collectie.</p>
-          </div>
-        </div>
+        <div class="profile-card-title">North Star Tracks</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Klik ⭐ in je collectie om tracks toe te voegen als smaakankerpunt.</div>
+        <div id="northStars"></div>
       </div>
-
       <div class="profile-card">
         <div class="profile-card-title">Smaakprofiel Tekst (kopieer naar AI)</div>
         <textarea id="profileText" rows="14" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:12px;font-family:'Space Mono',monospace;font-size:11px;line-height:1.7;outline:none;resize:vertical"></textarea>
-        <button class="modal-btn primary" style="margin-top:8px;padding:8px 20px;width:auto" onclick="copyProfile()">KOPIEER PROFIEL</button>
+        <button onclick="copyProfile(this)" style="margin-top:8px;padding:8px 20px;background:var(--accent);border:none;color:var(--bg);font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;cursor:pointer">KOPIEER PROFIEL</button>
       </div>
     </div>
 
-    <!-- FEEDBACK VIEW -->
+    <!-- FEEDBACK -->
     <div class="view" id="view-feedback">
       <div class="section-header">
-        <div>
-          <div class="section-title">FEEDBACK LOG</div>
-          <div class="section-subtitle">Jouw beoordelingen — het systeem leert hiervan</div>
-        </div>
+        <div><div class="section-title">FEEDBACK LOG</div><div class="section-subtitle">Gesynchroniseerd over al je toestellen</div></div>
         <button class="filter-btn" onclick="clearFeedback()">LOG WISSEN</button>
       </div>
-      <div id="feedbackLog">
-        <div class="empty-state">
-          <div class="icon">📊</div>
-          <p>Nog geen feedback. Beoordeel aanbevelingen in het Discover scherm.</p>
-        </div>
-      </div>
+      <div id="feedbackLog"></div>
     </div>
 
+    <!-- PLAYLISTS -->
+    <div class="view" id="view-playlists">
+      <div class="section-header">
+        <div><div class="section-title">PLAYLISTS</div><div class="section-subtitle">Stel zelf afspeellijsten samen uit je collectie</div></div>
+        <button class="filter-btn" style="border-color:var(--accent);color:var(--accent)" onclick="showCreatePlaylist()">+ NIEUWE PLAYLIST</button>
+      </div>
+      <div id="playlistsContainer"></div>
+    </div>
   </main>
 </div>
 
@@ -1030,7 +396,7 @@
     <div class="modal-track" id="modalTrackInfo"></div>
     <div class="tag-group">
       <div class="tag-group-label">Context</div>
-      <div class="tag-options" id="contextTags">
+      <div class="tag-options">
         <button class="tag-opt" data-group="context" data-val="warmup" onclick="toggleTag(this)">WARM-UP</button>
         <button class="tag-opt" data-group="context" data-val="peak" onclick="toggleTag(this)">PEAK</button>
         <button class="tag-opt" data-group="context" data-val="closing" onclick="toggleTag(this)">CLOSING</button>
@@ -1051,15 +417,100 @@
   </div>
 </div>
 
-<script>
-// ============================================================
-// DATA
-// ============================================================
+<!-- PLAYLIST ADD MODAL -->
+<div class="modal-overlay" id="playlistModal">
+  <div class="modal">
+    <div class="modal-title" id="playlistModalTitle">NIEUWE PLAYLIST</div>
+    <div class="tag-group">
+      <div class="tag-group-label">Naam</div>
+      <input id="playlistNameInput" class="search-box" style="width:100%" type="text" placeholder="bv. Late Night Set, Warm-up Selects...">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="closePlaylistModal()">ANNULEER</button>
+      <button class="modal-btn primary" onclick="savePlaylist()">AANMAKEN</button>
+    </div>
+  </div>
+</div>
 
+<!-- ADD TO PLAYLIST MODAL -->
+<div class="modal-overlay" id="addToPlaylistModal">
+  <div class="modal">
+    <div class="modal-title">TOEVOEGEN AAN PLAYLIST</div>
+    <div class="modal-track" id="addToPlaylistTrackInfo"></div>
+    <div id="playlistChoices" style="max-height:200px;overflow-y:auto;margin-bottom:8px"></div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="closeAddToPlaylistModal()">SLUITEN</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button class="bnav-btn active" id="bnav-collection" onclick="showView('collection',this,'bnav-collection')"><span class="bnav-icon">🎵</span>COLLECTIE</button>
+    <button class="bnav-btn" id="bnav-discover" onclick="showView('discover',this,'bnav-discover')"><span class="bnav-icon">🔍</span>DISCOVER</button>
+    <button class="bnav-btn" id="bnav-filters" onclick="toggleFilterDrawer()"><span class="bnav-icon">⚙</span>FILTERS</button>
+    <button class="bnav-btn" id="bnav-profile" onclick="showView('profile',this,'bnav-profile')"><span class="bnav-icon">★</span>PROFIEL</button>
+    <button class="bnav-btn" id="bnav-feedback" onclick="showView('feedback',this,'bnav-feedback')"><span class="bnav-icon">📊</span>LOG</button>
+    <button class="bnav-btn" id="bnav-playlists" onclick="showView('playlists',this,'bnav-playlists')"><span class="bnav-icon">▶</span>LISTS</button>
+  </div>
+</nav>
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeFilterDrawer()"></div>
+<div class="filter-drawer" id="filterDrawer">
+  <div class="filter-drawer-header">
+    <div class="filter-drawer-title">FILTERS</div>
+    <button class="drawer-close" onclick="closeFilterDrawer()">✕</button>
+  </div>
+  <div style="padding:16px">
+    <div class="sidebar-title">Label</div><div id="drawerLabelFilters"></div>
+    <div class="sidebar-title" style="margin-top:16px">Periode</div><div id="drawerYearFilters"></div>
+    <div class="sidebar-title" style="margin-top:16px">Tags</div>
+    <div>
+      <span class="label-chip" onclick="toggleTagFilter('warmup',this)">Warm-up</span>
+      <span class="label-chip" onclick="toggleTagFilter('peak',this)">Peak</span>
+      <span class="label-chip" onclick="toggleTagFilter('closing',this)">Closing</span>
+      <span class="label-chip" onclick="toggleTagFilter('vinyl',this)">Vinyl</span>
+      <span class="label-chip" onclick="toggleTagFilter('digital',this)">Digitaal</span>
+      <span class="label-chip" onclick="toggleTagFilter('ref',this)">Referentie</span>
+    </div>
+  </div>
+</div>
+
+
+<script>
 const DISCOGS_RAW = [{"id":"124363","artist":"Carlos Peron","title":"Power Trancefer EP","label":"!Hype","year":"1992","format":"12\", EP, Flu","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2025-01-11"},{"id":"481042","artist":"Roy Dubb","title":"Harambe / Kelele","label":"¡Ya Basta!","year":"2005","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-04-01"},{"id":"493281","artist":"Leon Haywood","title":"Don't Push It, Don't Force It (DM Remix 98)","label":"100% Recycled Records","year":"1998","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-07-30"},{"id":"3043","artist":"Octave One","title":"Black Water","label":"430 West","year":"2000","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-10-16"},{"id":"16868","artist":"Dave Angel","title":"Globetrotting","label":"4th & Broadway, Island Records","year":"1997","format":"CD, Album","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2025-12-04"},{"id":"2015159","artist":"Jared Wilson","title":"Ghettoblaster","label":"7777","year":"2009","format":"12\"","condition":"Near Mint (NM or M-)","folder":"DJ - Club","dateAdded":"2025-01-11"},{"id":"531232","artist":"DJ Pierre (2)","title":"Move Your Body","label":"Airplay Records, Carrere","year":"1990","format":"12\", Maxi","condition":"","folder":"DJ - Club","dateAdded":"2023-10-16"},{"id":"19759222","artist":"The Tropical Combo Feat Jazzamar","title":"Jungle Fever","label":"Aldente","year":"2021","format":"7\", Ltd","condition":"","folder":"DJ - Club","dateAdded":"2022-12-30"},{"id":"27813924","artist":"Larry Heard","title":"Vault Sessions 2","label":"Alleviated Records","year":"2023","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2024-01-02"},{"id":"4466","artist":"KC Flightt Vs Funky Junction","title":"Voices","label":"Alternative Route Recordings","year":"2000","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"22700","artist":"Ce Ce Peniston","title":"Somebody Else's Guy (Tuff Jam / Eric Kupper Mixes)","label":"AM:PM, A&M Records","year":"1998","format":"12\", Single","condition":"","folder":"DJ - Club","dateAdded":"2023-04-23"},{"id":"104822","artist":"Urban Blues Project Presents Michael Procter","title":"Love Don't Live (Jazz 'N' Groove / CJ Mackintosh Mixes)","label":"AM:PM, A&M Records, Soulfuric Recordings","year":"1996","format":"12\", 1/2","condition":"","folder":"DJ - Club","dateAdded":"2023-08-15"},{"id":"188978","artist":"Deborah Cox","title":"Who Do U Love","label":"Arista","year":"1996","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-08-15"},{"id":"55455","artist":"Deborah Cox","title":"Who Do U Love (Remixes)","label":"Arista, Word Of Mouth","year":"1996","format":"2x12\", Maxi, Promo","condition":"","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"15954555","artist":"GTS Feat Loleatta Holloway","title":"Share My Joy","label":"Artimage Vinyls","year":"1999","format":"12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2024-05-25"},{"id":"216506","artist":"Ceybil Jefferies","title":"Open Your Heart","label":"Atlantic","year":"1991","format":"12\"","condition":"Near Mint (NM or M-)","folder":"DJ - Club","dateAdded":"2024-05-25"},{"id":"185973","artist":"Steve \"Silk\" Hurley","title":"Work It Out","label":"Atlantic","year":"1989","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-10-16"},{"id":"70656","artist":"François Kevorkian","title":"Choice (A Collection Of Classics)","label":"Azuli Records","year":"2002","format":"2xCD, Comp","condition":"Mint (M)","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"964777","artist":"Joey Negro","title":"Back In The Box LP 01","label":"Back In The Box","year":"2007","format":"2x12\", Comp","condition":"","folder":"DJ - Club","dateAdded":"2023-02-12"},{"id":"39241","artist":"Norma Jean Bell","title":"I Like The Things You Do For Me","label":"Balance Prescription","year":"1996","format":"12\"","condition":"Near Mint (NM or M-)","folder":"DJ - Club","dateAdded":"2024-04-26"},{"id":"2829","artist":"Various","title":"Henry Street Music / The Story So Far - 1993 To 1999","label":"BBE, Henry Street Music","year":"1999","format":"2xLP, Comp","condition":"","folder":"DJ - Club","dateAdded":"2023-02-12"},{"id":"35620","artist":"Sueño Latino","title":"Sueño Latino - The Latin Dream (The Dream Remixes)","label":"BCM Records","year":"1989","format":"12\", Maxi","condition":"","folder":"DJ - Club","dateAdded":"2023-10-16"},{"id":"121624","artist":"Stukas","title":"You Make Me Feel So Good","label":"Beat Club Records","year":"1990","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-06-04"},{"id":"5852858","artist":"John Digweed","title":"Live In Miami 1/5","label":"Bedrock Records","year":"2014","format":"12\", RP","condition":"","folder":"DJ - Club","dateAdded":"2025-03-29"},{"id":"1912617","artist":"Various","title":"Belgian House Mafia Sampler 009","label":"Belgian House Mafia","year":"2009","format":"12\", Smplr","condition":"","folder":"DJ - Club","dateAdded":"2022-12-29"},{"id":"35634","artist":"Mr. Fingers","title":"Dead End Alley","label":"Black Market International","year":"1992","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"305863","artist":"Taana Gardner","title":"What Can I Do For You","label":"Blue Village","year":"1992","format":"12\"","condition":"Near Mint (NM or M-)","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"87194","artist":"Robert Owens","title":"Too Much For Me","label":"Blue Village","year":"1992","format":"12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"14795","artist":"Dave Angel","title":"Tales Of The Unexpected","label":"Blunted","year":"1995","format":"2xLP, Album","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2025-12-09"},{"id":"26849","artist":"Danny Krivit","title":"Mix The Vibe (Music Is My Sanctuary II)","label":"BPM King Street Sounds","year":"2002","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-11-09"},{"id":"182097","artist":"Boyd Jarvis Feat. Lisa Rudolph","title":"Don't Deny Love","label":"BPM King Street Sounds","year":"2002","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-11-09"},{"id":"34241","artist":"Two Man Sound","title":"Disco Samba / Que Tal America","label":"Break Records","year":"1985","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2022-12-29"},{"id":"727544","artist":"Rodamaal / Lephtee","title":"Buzzin' Fly Volume III","label":"Buzzin' Fly Records","year":"2006","format":"12\", EP","condition":"","folder":"DJ - Club","dateAdded":"2023-08-20"},{"id":"2222912","artist":"Moodymann","title":"Dem Young Sconies / The Third Track","label":"Decks Classix","year":"2010","format":"12\", RE, RM","condition":"","folder":"DJ - Club","dateAdded":"2022-12-30"},{"id":"83276","artist":"DJ Dero","title":"Batucada","label":"Dance Street","year":"1993","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"37731","artist":"Morenas","title":"Hazme Soñar","label":"DFC","year":"1989","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-08-20"},{"id":"4983","artist":"Lil' Louis","title":"French Kiss","label":"Diamond Records","year":"1989","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-10-16"},{"id":"3425249","artist":"K-Alexi","title":"Stick Music (Vol. 1, Part 1) / Shake","label":"D.J. International Records","year":"1990","format":"12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2025-01-11"},{"id":"80276","artist":"Kerri Chandler / Octavia Lambertis","title":"You're The Best / Strength","label":"Freetown Inc","year":"1998","format":"12\", Promo","condition":"","folder":"DJ - Club","dateAdded":"2023-08-20"},{"id":"43841","artist":"St Germain","title":"Motherland EP","label":"Fnac Music Dance Division","year":"1993","format":"12\", EP, Maxi","condition":"","folder":"DJ - Club","dateAdded":"2023-10-16"},{"id":"12994","artist":"Laurent Garnier","title":"The Man With The Red Face","label":"F Communications","year":"2000","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-10-16"},{"id":"156876","artist":"Frankie Knuckles Presents Jamie Principle","title":"Your Love / Baby Wants To Ride","label":"Who's That Beat?","year":"1989","format":"12\", Maxi","condition":"","folder":"DJ - Club","dateAdded":"2023-10-16"},{"id":"37903","artist":"Ron Trent","title":"Dance Floor Boogie Delites","label":"Prescription","year":"1995","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2024-11-02"},{"id":"9424309","artist":"Ron Trent","title":"I Feel The Rhythm","label":"Only One Music","year":"2016","format":"12\", RE","condition":"","folder":"DJ - Club","dateAdded":"2023-11-03"},{"id":"22875593","artist":"Ursula Rucker & Ron Trent","title":"Black Queen","label":"Makin' Moves","year":"2022","format":"12\", Ltd","condition":"","folder":"DJ - Club","dateAdded":"2023-11-03"},{"id":"133721","artist":"The Project (3)","title":"Can Batman Escape","label":"R & S Records","year":"1989","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-10-16"},{"id":"81918","artist":"2 In A Room","title":"Do What You Want (The 12 Inch Remixes)","label":"R & S Records","year":"1990","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-10-16"},{"id":"44916","artist":"Blake Baxter","title":"One More Time","label":"Logic Records","year":"1992","format":"12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"200920","artist":"Danny Tenaglia + Celeda","title":"Music Is The Answer (Dancin' And Prancin') (Remixes)","label":"Nitelite The Club Records","year":"1998","format":"12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2025-03-23"},{"id":"60426","artist":"Danny Tenaglia","title":"BackToBasics Presents Danny Tenaglia","label":"React","year":"2002","format":"4xLP, Comp","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2025-03-23"},{"id":"130341","artist":"Danny Tenaglia","title":"Ohno","label":"Twisted America Records","year":"1996","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-08-15"},{"id":"605661","artist":"LTJ Sound Machine","title":"Power To The People","label":"Irma CasaDiPrimordine","year":"1992","format":"12\"","condition":"Very Good (VG)","folder":"DJ - Club","dateAdded":"2022-09-11"},{"id":"2862351","artist":"Don Carlos","title":"The Cool Deep","label":"Irma CasaDiPrimordine","year":"2010","format":"CD, Album","condition":"Mint (M)","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"12239114","artist":"Don Carlos","title":"Paradise House (Deep Ambient Dream Paradise Garage House From 90's)","label":"Irma Records","year":"2018","format":"2xCD, Comp","condition":"Mint (M)","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"756837","artist":"Don Carlos","title":"Mediterraneo (Club Favourites Collection '90/98)","label":"Irma Unlimited","year":"2004","format":"CD, Comp","condition":"Mint (M)","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"67081","artist":"Club 69 Featuring Kim Cooper","title":"Diva","label":"TRIBAL America","year":"1995","format":"2x12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-08-20"},{"id":"18920","artist":"Liberty City","title":"Some Lovin'","label":"TRIBAL America","year":"1993","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-11-09"},{"id":"25501","artist":"Sextravaganza","title":"This Is TRIBAL America","label":"TRIBAL America","year":"1993","format":"12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2025-03-23"},{"id":"47686","artist":"Kiwi Dreams Featuring Darrell Martin","title":"Y?","label":"TRIBAL America","year":"1994","format":"12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2025-03-23"},{"id":"41976","artist":"Misbehavin' Featuring Joi Cardwell","title":"Hot Little Body","label":"TRIBAL America","year":"1994","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-03-25"},{"id":"47301","artist":"Namby Pamby","title":"Girlz / Bang","label":"TRIBAL America","year":"1994","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-03-25"},{"id":"64477","artist":"Junior Vasquez Meets Fire Island","title":"Get Your Hands Off My Man (Remixes)","label":"TRIBAL America","year":"1994","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-03-25"},{"id":"67066","artist":"Karnak","title":"Black Moon / White Rain","label":"TRIBAL America","year":"1995","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-08-15"},{"id":"67068","artist":"Streetlife Featuring Dana Stovall","title":"Love Breakdown","label":"TRIBAL America","year":"1995","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-03-25"},{"id":"115794","artist":"Oscar Gaetan Featuring Marck Michel","title":"Reaching Up","label":"TRIBAL America","year":"1995","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-03-25"},{"id":"46355","artist":"The Daou","title":"Give Myself To You","label":"TRIBAL United Kingdom","year":"1993","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2022-11-11"},{"id":"66990","artist":"Sextravaganza","title":"The Return Of Sextravaganza","label":"TRIBAL United Kingdom","year":"1994","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-03-25"},{"id":"39097","artist":"The Absolute Introducing Suzanne Palmer","title":"There Will Come A Day","label":"TRIBAL United Kingdom","year":"1995","format":"2x12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2024-05-25"},{"id":"39085","artist":"Eric Kupper Presents K-Scope (2)","title":"The K-Scope Project Part 2","label":"TRIBAL United Kingdom","year":"1995","format":"12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2024-04-26"},{"id":"85744","artist":"Various","title":"Yoshitoshi Artists - In House We Trust / Deep Dish - Penetrate Deeper","label":"TRIBAL United Kingdom","year":"1996","format":"2x12\", Comp","condition":"","folder":"DJ - Club","dateAdded":"2023-08-15"},{"id":"29680","artist":"XS","title":"Subsurfaced E.P.","label":"Yoshitoshi Recordings","year":"1995","format":"12\", EP","condition":"","folder":"DJ - Club","dateAdded":"2023-08-20"},{"id":"29693","artist":"Mysterious People","title":"Fly Away","label":"Yoshitoshi Recordings","year":"1998","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-08-15"},{"id":"29694","artist":"Kings Of Tomorrow","title":"I Want You (For Myself)","label":"Yoshitoshi Recordings","year":"1998","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-02-12"},{"id":"18652","artist":"Eddie Amador","title":"Rise","label":"Yoshitoshi Recordings","year":"1999","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-08-15"},{"id":"29700","artist":"Morel","title":"True (The Faggot Is You)","label":"Yoshitoshi Recordings","year":"1999","format":"2x12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-08-15"},{"id":"187566","artist":"Morel","title":"Cabaret","label":"Yoshitoshi Recordings","year":"2003","format":"2x12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-08-15"},{"id":"38127","artist":"Arnold Jarvis","title":"I Want 2 Have Your Love","label":"New Music International","year":"1991","format":"12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"358039","artist":"E.V.O.E.","title":"Este Amor","label":"New Music International","year":"1990","format":"12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"1265884","artist":"Man Machine","title":"Animal / Shout","label":"New Music International","year":"1991","format":"12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2022-09-11"},{"id":"322760","artist":"Mondo Grosso","title":"Mix The Vibe: Street King EP Part 1","label":"Nite Grooves","year":"2004","format":"12\", EP","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2024-05-25"},{"id":"459589","artist":"The Ananda Project","title":"Relight (EP 2)","label":"Nite Grooves","year":"2005","format":"12\", EP, Ltd","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2024-05-25"},{"id":"25683","artist":"DJ Hiro Featuring Masabumi Kikuchi","title":"Koté Moun Yo (Joe Claussell Remixes)","label":"Nite Grooves","year":"1997","format":"2x12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-11-09"},{"id":"26288126","artist":"Glenn Underground","title":"Afro Gente / 7th Trumpet","label":"Groovin Recordings","year":"2023","format":"12\", RE","condition":"","folder":"DJ - Club","dateAdded":"2023-05-14"},{"id":"24963181","artist":"The Anixus","title":"The Anixus EP - Vol.1","label":"Groovin Recordings","year":"2022","format":"12\", EP, RE","condition":"","folder":"DJ - Club","dateAdded":"2024-01-02"},{"id":"6918","artist":"D-HA","title":"Happy Trax Vol. V","label":"Happy Records","year":"1994","format":"12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2024-04-26"},{"id":"111077","artist":"Donna Allen","title":"He Is The Joy","label":"Soulfuric Recordings","year":"1999","format":"12\", TP","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2024-04-26"},{"id":"39190","artist":"Voices","title":"Voices In My Mind","label":"Sound Of Ministry","year":"1994","format":"12\"","condition":"Very Good Plus (VG+)","folder":"DJ - Club","dateAdded":"2024-04-26"},{"id":"54516","artist":"Raw Concept","title":"Don't Do It","label":"Jus' Trax","year":"1996","format":"12\"","condition":"Near Mint (NM or M-)","folder":"DJ - Club","dateAdded":"2024-04-26"},{"id":"99539","artist":"Sade","title":"By Your Side (Ben Watt Lazy Dog Remix)","label":"Epic","year":"2001","format":"12\", S/Sided, W/Lbl","condition":"","folder":"DJ - Club","dateAdded":"2024-05-25"},{"id":"222457","artist":"Brothers In Rhythm Present Charvoni","title":"Forever And A Day","label":"Epic Dance","year":"1994","format":"12\"","condition":"Mint (M)","folder":"DJ - Club","dateAdded":"2024-05-25"},{"id":"6734085","artist":"Hans Zimmer","title":"Interstellar (Original Motion Picture Soundtrack)","label":"Music On Vinyl, At The Movies","year":"2015","format":"2xLP, Album, Dlx, Ltd, 180","condition":"","folder":"DJ - Club","dateAdded":"2023-10-16"},{"id":"24277142","artist":"Lello Di Franco & Javonntte","title":"How We Groove EP","label":"Yore Records","year":"2022","format":"12\", EP, Ltd","condition":"","folder":"DJ - Club","dateAdded":"2023-10-29"},{"id":"25153846","artist":"Glenn Davis (18)","title":"Better Daze","label":"Yore Records","year":"2022","format":"12\", Maxi","condition":"","folder":"DJ - Club","dateAdded":"2023-02-18"},{"id":"26094343","artist":"Sam Ruffillo","title":"Brooklyn Tapes EP","label":"Toy Tonics","year":"2023","format":"12\", EP","condition":"","folder":"DJ - Club","dateAdded":"2024-01-03"},{"id":"24374648","artist":"Felipe Gordon & Bob The Egoist","title":"Freedom EP","label":"Toy Tonics","year":"2022","format":"12\", EP","condition":"","folder":"DJ - Club","dateAdded":"2022-12-30"},{"id":"27827361","artist":"Gome (3)","title":"Elevator Man ","label":"Toy Tonics","year":"2023","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2024-01-03"},{"id":"25326082","artist":"Kapote & Kosmo Kint","title":"Remix EP","label":"Toy Tonics","year":"2022","format":"12\", EP","condition":"","folder":"DJ - Club","dateAdded":"2024-01-03"},{"id":"13456","artist":"Halo & Hipp-e","title":"The H-Foundation","label":"Moody Recordings","year":"1999","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-02-12"},{"id":"45392","artist":"Masters At Work Featuring Liliana Chachian","title":"Brazilian Beat (Remixes)","label":"Mr Bongo","year":"2000","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2024-01-07"},{"id":"11585068","artist":"Eddie Amador","title":"The Funk","label":"Yoshitoshi Recordings","year":"0","format":"12\", TP","condition":"","folder":"DJ - Club","dateAdded":"2023-08-20"},{"id":"10248526","artist":"Mr. G","title":"Diggerz Delite (The Day I Met Pete)","label":"Phoenix G.","year":"2017","format":"12\", EP","condition":"","folder":"DJ - Club","dateAdded":"2025-05-03"},{"id":"16253690","artist":"The Vision (16)","title":"The Vision","label":"Defected","year":"2020","format":"2xLP, Album, Dlx, Ltd","condition":"","folder":"DJ - Club","dateAdded":"2022-12-29"},{"id":"421380","artist":"Ustad Sultan Khan","title":"Sayaji (The Sacred Rhythm Mixes)","label":"Raimo Symphonies","year":"2005","format":"12\", Unofficial","condition":"","folder":"DJ - Club","dateAdded":"2024-05-25"},{"id":"642358","artist":"Roy Ayers","title":"Virgin Ubiquity Remixed EP 4","label":"Rapster Records, BBE","year":"2005","format":"2x12\", EP","condition":"","folder":"DJ - Club","dateAdded":"2023-04-01"},{"id":"1373317","artist":"Archie Shepp","title":"Song For Mozambique / A Sea Of Faces (Remixed By Sun Tools/RPM)","label":"Mo'Smog Records","year":"2001","format":"12\"","condition":"","folder":"DJ - Club","dateAdded":"2023-11-09"},{"id":"31693559","artist":"Jeremy 'Underground Paris'","title":"90's House & Garage Vol.3 (Part 2)","label":"Z Records","year":"2024","format":"2x12\", Comp","condition":"","folder":"DJ - Club","dateAdded":"2024-11-02"}];
 
 // Spotify sample (first 100 for performance)
 const SPOTIFY_RAW = [{"id":"6j9cYzBKAUEYNzP3AnhJV9","title":"The Call","artist":"Marcel Dettmann;Norman Nodge","album":"Ostgut Ton Fünfzehn + 1","label":"Ostgut Ton","year":"2021","genres":["minimal techno","techno","dub techno"],"bpm":130,"energy":84,"danceability":80,"instrumentalness":92},{"id":"6koFbHu3Y7F0I7P0kLksZa","title":"I'll Say A Prayer 4 U","artist":"Equation","album":"The Theory Of Housativity","label":"Nu Groove Records","year":"1991","genres":["acid house","chicago house"],"bpm":125,"energy":88,"danceability":67,"instrumentalness":65},{"id":"6b5IJEVYFEZ1YkgZ0oXaJK","title":"Final Credits","artist":"Midland","album":"Final Credits","label":"Classic Music Company","year":"2016","genres":["discohouse"],"bpm":133,"energy":81,"danceability":82,"instrumentalness":36},{"id":"4ESwkGCyueRheJClLZJLHJ","title":"Sunday blues","artist":"Mr. G","album":"Rexperience #01","label":"Module","year":"2010","genres":["jazz house","chicago house"],"bpm":124,"energy":67,"danceability":82,"instrumentalness":89},{"id":"1dvP82ShxLFSVira6URGyx","title":"The Future","artist":"Armando","album":"One World One Future","label":"Trax Records","year":"2014","genres":["acid house","chicago house"],"bpm":132,"energy":65,"danceability":79,"instrumentalness":92},{"id":"32i7AdcWTyGtCQNm2tPesy","title":"Trancer's","artist":"Armando","album":"The New World Order 4","label":"Phuture Trax Records","year":"2014","genres":["acid house","chicago house"],"bpm":133,"energy":41,"danceability":79,"instrumentalness":96},{"id":"5x9PIacjaOGqcQkmiQBfKG","title":"Throw","artist":"Paperclip People","album":"The Secret Tapes Of Dr. Eich","label":"Planet E Communications","year":"2012","genres":["chicago house","acid house"],"bpm":127,"energy":54,"danceability":80,"instrumentalness":90},{"id":"3jXNZmZm3Pcz2b7xNpovSW","title":"Wake Me","artist":"Kenny Larkin","album":"Keys, Strings, Tambourines","label":"Planet E Communications","year":"2008","genres":["acid house","minimal techno","techno","chicago house"],"bpm":127,"energy":58,"danceability":82,"instrumentalness":85},{"id":"5JIen4dNqv5ZKjphMESEM0","title":"Keys, Strings, Tambourines","artist":"Kenny Larkin","album":"Keys, Strings, Tambourines","label":"Planet E Communications","year":"2008","genres":["acid house","minimal techno","techno","chicago house"],"bpm":137,"energy":65,"danceability":71,"instrumentalness":43},{"id":"0Hriy0p7SQCgnzjDFoWkxB","title":"Cirque de Soul","artist":"Kenny Larkin","album":"Keys, Strings, Tambourines","label":"Planet E Communications","year":"2008","genres":["acid house","minimal techno","techno","chicago house"],"bpm":126,"energy":56,"danceability":68,"instrumentalness":89},{"id":"1T6pggdfN7VfrBW6Ahneu4","title":"Drum Pattern & Memories","artist":"Rick Wilhite","album":"The Godson & Soul Edge","label":"Rush Hour","year":"2011","genres":["chicago house"],"bpm":122,"energy":88,"danceability":62,"instrumentalness":93},{"id":"3VzF0WevhApsLuPHoTeyWM","title":"Space Dance","artist":"Ron Trent","album":"Scientific Methods Of Storytelling Vol. 1","label":"Future Vision Records","year":"2011","genres":["chicago house"],"bpm":123,"energy":70,"danceability":56,"instrumentalness":76},{"id":"22quGR6RpTUfe3HY7pFQCE","title":"The Afterlife","artist":"Ron Trent","album":"Altered States Blak Tech Society","label":"Prescription Classic Recordings","year":"2010","genres":["chicago house"],"bpm":123,"energy":87,"danceability":80,"instrumentalness":94},{"id":"142D7NKJix5rmCnryDdVrY","title":"Forevernevermore","artist":"Moodymann","album":"Telephone","label":"Peacefrog Records","year":"2001","genres":["jazz house","chicago house","deep house"],"bpm":121,"energy":57,"danceability":73,"instrumentalness":43},{"id":"4u4hjSzHMv0BwsWvaxF2pF","title":"No","artist":"Moodymann","album":"Moodymann","label":"Kdj Records","year":"2014","genres":["jazz house","chicago house","deep house"],"bpm":125,"energy":54,"danceability":91,"instrumentalness":55},{"id":"50TVKYY0LRQAqKI8EfBqzC","title":"The Sun Can't Compare","artist":"Larry Heard;Mr White","album":"E.P.","label":"Alleviated Records","year":"2009","genres":["chicago house","acid house","jazz house"],"bpm":128,"energy":65,"danceability":80,"instrumentalness":73},{"id":"1Aopr1OS3EWgKZ7kFeeiii","title":"Brownstone Express","artist":"Metro","album":"$1.15 Please","label":"Nu Groove Records","year":"1990","genres":["chicago house","acid house"],"bpm":121,"energy":52,"danceability":79,"instrumentalness":90},{"id":"1fQl4V2H28FBwgnXnx4lVX","title":"303 Sunset","artist":"Galaxy 2 Galaxy","album":"Galaxy 2 Galaxy: A High Tech Jazz Compilation","label":"Submerge Recordings","year":"2005","genres":["acid house","chicago house","idm"],"bpm":115,"energy":76,"danceability":68,"instrumentalness":93},{"id":"435gYRqlNsl03RtASiPjCa","title":"Black Slaves = Israel","artist":"Glenn Underground","album":"The Jerusalem EP's","label":"Peacefrog Records","year":"1997","genres":["chicago house","deep house","jazz house","acid house"],"bpm":120,"energy":72,"danceability":69,"instrumentalness":86},{"id":"48am81vxAwvKiFWCsaalct","title":"Star Gate","artist":"Glenn Underground","album":"Black Resurrection","label":"Strictly Jaz Unit Muzic","year":"2015","genres":["chicago house","deep house","jazz house","acid house"],"bpm":120,"energy":55,"danceability":75,"instrumentalness":76},{"id":"7CuvB2MHEZRAj86E8MIRVa","title":"The Dream","artist":"K'Alexi Shelby","album":"Klassic K'Alexi, Vol. 1 - EP","label":"Syncrophone","year":"2011","genres":["chicago house","acid house"],"bpm":125,"energy":64,"danceability":71,"instrumentalness":82},{"id":"0VjpJ6aSEJ7ksjDzCu7S5s","title":"Edge of Time","artist":"Francois K","album":"FK - EP and Beyond","label":"Wave Music","year":"1996","genres":["chicago house"],"bpm":120,"energy":84,"danceability":71,"instrumentalness":94},{"id":"4KIKqhxufzctbH1Zxm0ibN","title":"Heavy Piano","artist":"Duran y Garcia","album":"Encantado!","label":"Irma Records","year":"2008","genres":["jazz house","nu jazz","acid jazz"],"bpm":124,"energy":61,"danceability":69,"instrumentalness":94},{"id":"0RWwBD9HulayKkBDJglrrb","title":"Luna","artist":"David Alvarado","album":"Transfiguration","label":"NRK","year":"2005","genres":["dub techno"],"bpm":125,"energy":58,"danceability":70,"instrumentalness":90},{"id":"5SJY5Ekfuni5PCdT96c5sh","title":"Sol","artist":"David Alvarado","album":"Transfiguration","label":"NRK","year":"2005","genres":["dub techno"],"bpm":127,"energy":64,"danceability":86,"instrumentalness":95},{"id":"5iEwpgeONi05Jye4WIgsKl","title":"Dark Forces","artist":"Slam","album":"Soma Quality Recordings Vol. 3","label":"Soma Records","year":"1996","genres":["acid techno","techno","acid house","minimal techno"],"bpm":137,"energy":91,"danceability":66,"instrumentalness":86},{"id":"4GhZYHx297taLyBjUcZoHg","title":"San Narciso","artist":"Maas","album":"San Narciso","label":"Soma Records","year":"1995","genres":[],"bpm":126,"energy":98,"danceability":67,"instrumentalness":85},{"id":"3FYh3RvqScHrVIsaDaKkWW","title":"Eniac","artist":"Octave One","album":"Depth Charge 4","label":"Submerge Recordings","year":"2009","genres":["techno"],"bpm":131,"energy":82,"danceability":80,"instrumentalness":93},{"id":"7ugrp4AhQfNdxqzqFSodIZ","title":"Recognize","artist":"Octave One","album":"The Living Key (To Images from Above)","label":"430 West Records","year":"2008","genres":["techno"],"bpm":130,"energy":86,"danceability":80,"instrumentalness":92},{"id":"1YZptuT8DDqDarfGb6wYd1","title":"Jungle Love","artist":"Dave Angel","album":"Classics","label":"R&S Records","year":"1996","genres":["acid house","acid techno"],"bpm":140,"energy":90,"danceability":62,"instrumentalness":86},{"id":"7rBjPvA5w0B3PLUediICzO","title":"Trip to Darkness","artist":"Dave Angel","album":"Classics","label":"R&S Records","year":"1996","genres":["acid house","acid techno"],"bpm":137,"energy":76,"danceability":60,"instrumentalness":92},{"id":"0fgqB99yUPxvDICRbZr1DM","title":"Extra - Dave Angel Remix","artist":"Ken Ishii;Dave Angel","album":"Extra","label":"R&S Records","year":"1995","genres":["idm","techno","acid house","acid techno"],"bpm":137,"energy":92,"danceability":80,"instrumentalness":89},{"id":"4waysnrx2G5kTwJIkMRBCR","title":"Avalon","artist":"&ME","album":"Avalon EP","label":"Keinemusik","year":"2017","genres":["afrohouse","afrotech","house","melodieuze house"],"bpm":120,"energy":92,"danceability":75,"instrumentalness":93},{"id":"1vlAQLAeoXMxvk627E463v","title":"Engage","artist":"Patrice Bäumel","album":"Glutes","label":"Afterlife","year":"2017","genres":["melodieuze techno","melodieuze house","minimal techno","techno"],"bpm":127,"energy":94,"danceability":79,"instrumentalness":93},{"id":"2bpgxoTOssoxBr48voBzwI","title":"Higher State of Consciousness","artist":"Josh Wink","album":"Higher State of Consciousness","label":"Strictly Rhythm Records","year":"1995","genres":["acid house","acid techno"],"bpm":128,"energy":69,"danceability":73,"instrumentalness":88},{"id":"7sBAYj9DLDYz8lFMV89cF6","title":"Meditation Will Manifest","artist":"Josh Wink","album":"Meditation Will Manifest","label":"R&S Records","year":"2016","genres":["acid house","acid techno"],"bpm":130,"energy":93,"danceability":64,"instrumentalness":81},{"id":"2YEdaLMKXpgDwmHQgTpHgW","title":"Icon - Montage Mix","artist":"Derrick May;Rhythim Is Rhythim","album":"Mysterious Traveller","label":"A-Wave Records","year":"2002","genres":["acid house","chicago house","techno"],"bpm":130,"energy":81,"danceability":41,"instrumentalness":75},{"id":"4ZKpnuAkhPB2HDcZ0UbD2G","title":"Spin","artist":"Juan Atkins","album":"Fast Forward","label":"Parlophone UK","year":"2004","genres":["dub techno","techno","minimal techno","chicago house"],"bpm":120,"energy":54,"danceability":61,"instrumentalness":86},{"id":"6ndl0CgS7LZ2dgtxobG9GJ","title":"Sundog","artist":"Reel By Real;Juan Atkins","album":"The Future Sound EP","label":"Metroplex Records","year":"1993","genres":["dub techno","techno","minimal techno","chicago house"],"bpm":125,"energy":56,"danceability":80,"instrumentalness":90},{"id":"0gCE7tTOkKCzbCKrWO5WF1","title":"Coke","artist":"Ryo Murakami","album":"Down the Sky","label":"Poker Flat Recordings","year":"2008","genres":["jazz house","dub techno","deep house"],"bpm":124,"energy":91,"danceability":79,"instrumentalness":89},{"id":"19csdFe9wsvsEQpkww5cSU","title":"Planet Nine","artist":"Gerd","album":"Easin' in the S-System","label":"Frame of Mind","year":"2019","genres":["acid house"],"bpm":126,"energy":83,"danceability":80,"instrumentalness":92},{"id":"1wjrTUhxzWRkuCqNGfSKJZ","title":"Easin' In The S-System","artist":"Gerd","album":"Easin' in the S-System","label":"Frame of Mind","year":"2019","genres":["acid house"],"bpm":129,"energy":66,"danceability":63,"instrumentalness":89},{"id":"4cRFaMW1iF73hjoQ3F6fR7","title":"Get your Money Man","artist":"Reggie The Movemaker","album":"Get your Money Man / Taste my Love","label":"Clone Classic Cuts","year":"2006","genres":["chicago house","acid house"],"bpm":123,"energy":64,"danceability":77,"instrumentalness":90}];
+</script>
+
+<script>
+// ============================================================
+// PERSISTENT STORAGE — cross-device sync via window.storage
+// ============================================================
+const DB = {
+  async get(key) {
+    try {
+      const r = await window.storage.get(key, true); // shared=true for cross-device
+      return r ? JSON.parse(r.value) : null;
+    } catch(e) { return null; }
+  },
+  async set(key, val) {
+    try {
+      await window.storage.set(key, JSON.stringify(val), true);
+    } catch(e) {
+      // Fallback to localStorage if storage API unavailable
+      localStorage.setItem(key, JSON.stringify(val));
+    }
+  },
+  // Local-only (per-device settings like proxy URL)
+  getLocal(key, def=null) {
+    try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; }
+  },
+  setLocal(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+  }
+};
 
 // ============================================================
 // STATE
@@ -1074,30 +525,63 @@ let state = {
   filterTag: null,
   page: 1,
   perPage: 25,
-  tags: JSON.parse(localStorage.getItem('crate_tags') || '{}'),
-  feedback: JSON.parse(localStorage.getItem('crate_feedback') || '[]'),
+  tags: {},
+  feedback: [],
+  savedTracks: [],   // [{id, artist, title, label, year, why, context, spotify_url, discogs_url, youtube_search, dateAdded}]
+  playlists: [],     // [{id, name, tracks:[{source, trackId, artist, title}], dateCreated}]
   modalTrack: null,
-  modalTags: {}
+  modalTags: {},
+  addToPlaylistTrack: null
 };
+
+let yearFilterFn = null;
 
 // ============================================================
 // INIT
 // ============================================================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  setSyncStatus('syncing');
+  // Load persisted data
+  const [tags, feedback, savedTracks, playlists] = await Promise.all([
+    DB.get('crate_tags'),
+    DB.get('crate_feedback'),
+    DB.get('crate_saved'),
+    DB.get('crate_playlists')
+  ]);
+  if(tags) state.tags = tags;
+  if(feedback) state.feedback = feedback;
+  if(savedTracks) state.savedTracks = savedTracks;
+  if(playlists) state.playlists = playlists;
+  setSyncStatus('synced');
+
   buildSidebar();
   renderCollection();
   renderProfile();
   renderFeedback();
+  renderPlaylists();
   initProxy();
 });
 
+function setSyncStatus(s) {
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncStatus');
+  if(!dot) return;
+  dot.className = 'sync-dot ' + s;
+  txt.textContent = s === 'synced' ? 'gesync' : s === 'syncing' ? 'bezig...' : '—';
+}
+
+async function persist(key, val) {
+  setSyncStatus('syncing');
+  await DB.set(key, val);
+  setSyncStatus('synced');
+}
+
+// ============================================================
+// SIDEBAR
+// ============================================================
 function buildSidebar() {
-  // Top labels
   const labelCounts = {};
-  DISCOGS_RAW.forEach(r => {
-    const l = r.label.split(',')[0].trim();
-    labelCounts[l] = (labelCounts[l]||0)+1;
-  });
+  DISCOGS_RAW.forEach(r => { const l = r.label.split(',')[0].trim(); labelCounts[l] = (labelCounts[l]||0)+1; });
   const topLabels = Object.entries(labelCounts).sort((a,b)=>b[1]-a[1]).slice(0,12);
   const lf = document.getElementById('labelFilters');
   topLabels.forEach(([l,c]) => {
@@ -1107,8 +591,6 @@ function buildSidebar() {
     chip.onclick = () => toggleLabelFilter(l, chip);
     lf.appendChild(chip);
   });
-
-  // Year ranges
   const yearRanges = [['Pre-90','< 1990',r=>r.year<'1990'&&r.year>'1970'],['90-94','1990–94',r=>r.year>='1990'&&r.year<='1994'],['95-99','1995–99',r=>r.year>='1995'&&r.year<='1999'],['00-09','2000s',r=>r.year>='2000'&&r.year<='2009'],['2010s','2010+',r=>r.year>='2010']];
   const yf = document.getElementById('yearFilters');
   yearRanges.forEach(([id,label,fn]) => {
@@ -1122,70 +604,62 @@ function buildSidebar() {
 }
 
 // ============================================================
-// COLLECTION
+// FILTERS
 // ============================================================
-let yearFilterFn = null;
-
 function toggleLabelFilter(label, el) {
   if(state.filterLabel === label) { state.filterLabel = null; el.classList.remove('active'); }
   else {
-    document.querySelectorAll('#labelFilters .label-chip').forEach(c=>c.classList.remove('active'));
+    document.querySelectorAll('#labelFilters .label-chip,#drawerLabelFilters .label-chip').forEach(c=>c.classList.remove('active'));
     state.filterLabel = label; el.classList.add('active');
   }
   state.page = 1; renderCollection();
 }
-
 function toggleYearFilter(id, fn, el) {
   if(state.filterYear === id) { state.filterYear = null; yearFilterFn = null; el.classList.remove('active'); }
   else {
-    document.querySelectorAll('#yearFilters .label-chip').forEach(c=>c.classList.remove('active'));
+    document.querySelectorAll('#yearFilters .label-chip,#drawerYearFilters .label-chip').forEach(c=>c.classList.remove('active'));
     state.filterYear = id; yearFilterFn = fn; el.classList.add('active');
   }
   state.page = 1; renderCollection();
 }
-
-function toggleTagFilter(tag) {
+function toggleTagFilter(tag, el) {
   if(state.filterTag === tag) { state.filterTag = null; }
   else { state.filterTag = tag; }
-  document.querySelectorAll('.filter-tag').forEach(c=>{
-    c.classList.toggle('active', c.dataset.tag===state.filterTag);
-  });
+  document.querySelectorAll('.filter-tag').forEach(c => c.classList.toggle('active', c.dataset.tag===state.filterTag));
   state.page = 1; renderCollection();
 }
-
 function switchSource(src, btn) {
-  state.source = src;
-  state.page = 1;
-  document.querySelectorAll('.filter-btn').forEach(b=>{ if(b.onclick?.toString().includes('switchSource')) b.classList.remove('active'); });
+  state.source = src; state.page = 1;
+  document.querySelectorAll('#srcDiscogs,#srcSpotify,#srcSaved').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  const bpmBtn = document.getElementById('bpmSortBtn');
-  if(bpmBtn) bpmBtn.style.display = src==='spotify' ? 'inline-block' : 'none';
+  document.getElementById('bpmSortBtn').style.display = src==='spotify' ? 'inline-block' : 'none';
   renderCollection();
 }
-
 function filterCollection(val) { state.search = val.toLowerCase(); state.page = 1; renderCollection(); }
 function sortBy(field, btn) {
-  if(state.sort===field) state.sortDir *= -1;
-  else { state.sort = field; state.sortDir = 1; }
+  if(state.sort===field) state.sortDir *= -1; else { state.sort = field; state.sortDir = 1; }
   document.querySelectorAll('[data-sort]').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderCollection();
+  btn.classList.add('active'); renderCollection();
 }
 
+// ============================================================
+// COLLECTION
+// ============================================================
 function getFilteredData() {
-  let data = state.source==='discogs' ? DISCOGS_RAW : SPOTIFY_RAW;
-  if(state.search) data = data.filter(r=>`${r.artist} ${r.title} ${r.label}`.toLowerCase().includes(state.search));
-  if(state.filterLabel) data = data.filter(r=>r.label.includes(state.filterLabel));
-  if(yearFilterFn) data = data.filter(yearFilterFn);
-  if(state.filterTag) data = data.filter(r=>{
-    const t = state.tags[r.id]||{};
-    return t.context===state.filterTag || t.status===state.filterTag;
-  });
-
+  let data;
+  if(state.source === 'saved') {
+    data = state.savedTracks.map(t => ({...t, _source:'saved'}));
+  } else {
+    data = state.source==='discogs' ? DISCOGS_RAW.map(t=>({...t,_source:'discogs'})) : SPOTIFY_RAW.map(t=>({...t,_source:'spotify'}));
+  }
+  if(state.search) data = data.filter(r=>`${r.artist} ${r.title} ${r.label||''}`.toLowerCase().includes(state.search));
+  if(state.filterLabel && state.source!=='saved') data = data.filter(r=>r.label&&r.label.includes(state.filterLabel));
+  if(yearFilterFn && state.source!=='saved') data = data.filter(yearFilterFn);
+  if(state.filterTag) data = data.filter(r=>{ const t=state.tags[r.id]||{}; return t.context===state.filterTag||t.status===state.filterTag; });
   data = [...data].sort((a,b)=>{
-    let av = a[state.sort]||'', bv = b[state.sort]||'';
+    let av=a[state.sort]||'', bv=b[state.sort]||'';
     if(typeof av==='number') return (av-bv)*state.sortDir;
-    return av.localeCompare(bv)*state.sortDir;
+    return String(av).localeCompare(String(bv))*state.sortDir;
   });
   return data;
 }
@@ -1196,44 +670,73 @@ function renderCollection() {
   const pages = Math.ceil(total/state.perPage);
   const start = (state.page-1)*state.perPage;
   const pageData = data.slice(start, start+state.perPage);
-
   document.getElementById('collectionCount').textContent = total;
-
   const thead = document.getElementById('tableHead');
   const tbody = document.getElementById('tableBody');
 
-  if(state.source==='discogs') {
+  if(state.source === 'saved') {
     thead.innerHTML = `<tr>
       <th onclick="sortBy('artist',this)" data-sort="artist">ARTIEST</th>
       <th onclick="sortBy('title',this)" data-sort="title">TITEL</th>
       <th onclick="sortBy('label',this)" data-sort="label">LABEL</th>
       <th onclick="sortBy('year',this)" data-sort="year">JAAR</th>
-      <th class='col-format'>FORMAT</th>
+      <th>CONTEXT</th>
+      <th></th>
+    </tr>`;
+    tbody.innerHTML = pageData.map(r => {
+      const spotLink = r.spotify_url ? `<a class="icon-btn" href="${r.spotify_url}" target="_blank" title="Spotify op Spotify" style="color:#1ED760;border-color:rgba(30,215,96,0.3)">▶</a>` : '';
+      const ytLink = `<a class="icon-btn" href="https://www.youtube.com/results?search_query=${encodeURIComponent(r.artist+' '+r.title)}" target="_blank" title="YouTube">YT</a>`;
+      const dcLink = r.discogs_url ? `<a class="icon-btn" href="${r.discogs_url}" target="_blank" title="Discogs" style="color:var(--accent);border-color:rgba(232,255,0,0.3)">D</a>` : '';
+      return `<tr>
+        <td class="track-artist">${esc(r.artist)}</td>
+        <td class="track-title">${esc(r.title)}</td>
+        <td class="track-label">${esc(r.label||'')}</td>
+        <td class="track-year">${r.year||''}</td>
+        <td><span class="tag tag-${r.context||'peak'}">${r.context||'—'}</span></td>
+        <td><div class="actions">
+          ${spotLink}${ytLink}${dcLink}
+          <button class="icon-btn" onclick="openAddToPlaylistModal(${JSON.stringify(r).replace(/"/g,'&quot;')})" title="Aan playlist toevoegen">+</button>
+          <button class="icon-btn" onclick="removeSavedTrack('${r.id}')" title="Verwijderen" style="color:var(--red)">✕</button>
+        </div></td>
+      </tr>`;
+    }).join('');
+
+  } else if(state.source==='discogs') {
+    thead.innerHTML = `<tr>
+      <th onclick="sortBy('artist',this)" data-sort="artist">ARTIEST</th>
+      <th onclick="sortBy('title',this)" data-sort="title">TITEL / TRACKS</th>
+      <th onclick="sortBy('label',this)" data-sort="label">LABEL</th>
+      <th onclick="sortBy('year',this)" data-sort="year">JAAR</th>
+      <th class="col-format">FORMAT</th>
       <th>TAGS</th>
       <th></th>
     </tr>`;
     tbody.innerHTML = pageData.map(r => {
       const t = state.tags[r.id]||{};
       const tags = [
-        t.context ? `<span class="tag tag-${t.context}">${t.context}</span>` : '',
-        t.status ? `<span class="tag tag-${t.status}">${t.status==='ref'?'⭐ ref':t.status}</span>` : ''
+        t.context?`<span class="tag tag-${t.context}">${t.context}</span>`:'',
+        t.status?`<span class="tag tag-${t.status}">${t.status==='ref'?'⭐':t.status}</span>`:''
       ].join('');
       return `<tr>
         <td class="track-artist">${esc(r.artist)}</td>
-        <td class="track-title">${esc(r.title)}</td>
+        <td>
+          <div class="track-title">${esc(r.title)}</div>
+          <button class="expand-btn" onclick="toggleExpand('${r.id}','${encodeURIComponent(r.artist)}','${encodeURIComponent(r.title)}')">▸ tracks</button>
+          <div class="track-list" id="tl-${r.id}"></div>
+        </td>
         <td class="track-label">${esc(r.label.split(',')[0])}</td>
         <td class="track-year">${r.year}</td>
-        <td class="track-label col-format" style="white-space:nowrap">${esc(r.format.split(',')[0])}</td>
+        <td class="track-label col-format">${esc((r.format||'').split(',')[0])}</td>
         <td>${tags}</td>
-        <td>
-          <div class="actions">
-            <button class="icon-btn ${t.status==='ref'?'active':''}" onclick="quickStar('${r.id}')" title="Referentie">⭐</button>
-            <button class="icon-btn" onclick="openTagModal(${JSON.stringify(r).replace(/"/g,'&quot;')})" title="Taggen">🏷</button>
-            <a class="icon-btn" href="https://www.discogs.com/release/${r.id}" target="_blank" title="Discogs">D</a>
-          </div>
-        </td>
+        <td><div class="actions">
+          <button class="icon-btn ${t.status==='ref'?'active':''}" onclick="quickStar('${r.id}')" title="Referentie">⭐</button>
+          <button class="icon-btn" onclick="openTagModal(${JSON.stringify(r).replace(/"/g,'&quot;')})" title="Taggen">🏷</button>
+          <a class="icon-btn" href="https://www.discogs.com/release/${r.id}" target="_blank" title="Discogs">D</a>
+          <button class="icon-btn" onclick="openAddToPlaylistModal(${JSON.stringify(r).replace(/"/g,'&quot;')})" title="Aan playlist">+</button>
+        </div></td>
       </tr>`;
     }).join('');
+
   } else {
     thead.innerHTML = `<tr>
       <th onclick="sortBy('artist',this)" data-sort="artist">ARTIEST</th>
@@ -1241,48 +744,216 @@ function renderCollection() {
       <th onclick="sortBy('label',this)" data-sort="label">LABEL</th>
       <th onclick="sortBy('year',this)" data-sort="year">JAAR</th>
       <th onclick="sortBy('bpm',this)" data-sort="bpm">BPM</th>
-      <th>GENRES</th>
       <th>TAGS</th>
       <th></th>
     </tr>`;
     tbody.innerHTML = pageData.map(r => {
       const t = state.tags[r.id]||{};
-      const tags = [
-        t.context ? `<span class="tag tag-${t.context}">${t.context}</span>` : '',
-        t.status ? `<span class="tag tag-${t.status}">${t.status==='ref'?'⭐ ref':t.status}</span>` : ''
-      ].join('');
-      const genres = (r.genres||[]).slice(0,2).map(g=>`<span class="tag" style="border-color:var(--border);color:var(--muted)">${g}</span>`).join('');
-      const bpmColor = r.bpm < 120 ? '#4488ff' : r.bpm < 128 ? 'var(--green)' : r.bpm < 135 ? 'var(--accent)' : 'var(--accent2)';
+      const tags = [t.context?`<span class="tag tag-${t.context}">${t.context}</span>`:'',t.status?`<span class="tag tag-${t.status}">${t.status==='ref'?'⭐':t.status}</span>`:''].join('');
+      const bpmColor = r.bpm<120?'#4488ff':r.bpm<128?'var(--green)':r.bpm<135?'var(--accent)':'var(--accent2)';
       return `<tr>
         <td class="track-artist">${esc(r.artist.split(';')[0])}</td>
         <td class="track-title">${esc(r.title)}</td>
         <td class="track-label">${esc(r.label)}</td>
         <td class="track-year">${r.year}</td>
         <td style="color:${bpmColor};font-weight:700;font-size:12px">${r.bpm}</td>
-        <td>${genres}</td>
         <td>${tags}</td>
-        <td>
-          <div class="actions">
-            <button class="icon-btn ${t.status==='ref'?'active':''}" onclick="quickStar('${r.id}')" title="Referentie">⭐</button>
-            <button class="icon-btn" onclick="openTagModal(${JSON.stringify(r).replace(/"/g,'&quot;')})" title="Taggen">🏷</button>
-            <a class="icon-btn" href="https://open.spotify.com/track/${r.id}" target="_blank" title="Spotify">S</a>
-          </div>
-        </td>
+        <td><div class="actions">
+          <button class="icon-btn ${t.status==='ref'?'active':''}" onclick="quickStar('${r.id}')" title="Referentie">⭐</button>
+          <button class="icon-btn" onclick="openTagModal(${JSON.stringify(r).replace(/"/g,'&quot;')})" title="Taggen">🏷</button>
+          <a class="icon-btn" href="https://open.spotify.com/track/${r.id}" target="_blank" title="Spotify" style="color:#1ED760;border-color:rgba(30,215,96,0.3)">▶</a>
+          <button class="icon-btn" onclick="openAddToPlaylistModal(${JSON.stringify(r).replace(/"/g,'&quot;')})" title="Aan playlist">+</button>
+        </div></td>
       </tr>`;
     }).join('');
   }
 
   // Pagination
   const pag = document.getElementById('pagination');
-  if(pages<=1) { pag.innerHTML=''; return; }
-  let html = '';
-  if(state.page>1) html += `<button class="page-btn" onclick="goPage(${state.page-1})">← VORIGE</button>`;
-  html += `<span class="page-info">pagina ${state.page} / ${pages}</span>`;
-  if(state.page<pages) html += `<button class="page-btn" onclick="goPage(${state.page+1})">VOLGENDE →</button>`;
+  if(pages<=1){pag.innerHTML='';return;}
+  let html='';
+  if(state.page>1) html+=`<button class="page-btn" onclick="goPage(${state.page-1})">← VORIGE</button>`;
+  html+=`<span class="page-info">pagina ${state.page} / ${pages}</span>`;
+  if(state.page<pages) html+=`<button class="page-btn" onclick="goPage(${state.page+1})">VOLGENDE →</button>`;
   pag.innerHTML = html;
 }
 
-function goPage(p) { state.page = p; renderCollection(); window.scrollTo(0,0); }
+function goPage(p){state.page=p;renderCollection();window.scrollTo(0,0);}
+
+// ============================================================
+// DISCOGS TRACK EXPAND
+// ============================================================
+async function toggleExpand(releaseId, artistEnc, titleEnc) {
+  const tl = document.getElementById('tl-'+releaseId);
+  const btn = tl.previousElementSibling;
+  if(tl.classList.contains('open')) {
+    tl.classList.remove('open'); btn.textContent='▸ tracks'; return;
+  }
+  btn.textContent='▾ tracks';
+  tl.classList.add('open');
+  if(tl.hasChildNodes()) return; // already loaded
+  tl.innerHTML = '<div style="color:var(--muted);font-size:10px;padding:6px">Laden...</div>';
+  // Try to fetch tracklist from Discogs API (no auth needed for basic data)
+  try {
+    const res = await fetch(`https://api.discogs.com/releases/${releaseId}`, {headers:{'User-Agent':'Cratedigger/1.0'}});
+    if(!res.ok) throw new Error('not found');
+    const data = await res.json();
+    const tracks = data.tracklist || [];
+    if(!tracks.length) { tl.innerHTML='<div style="color:var(--muted);font-size:10px;padding:6px">Geen tracklist beschikbaar.</div>'; return; }
+    tl.innerHTML = tracks.map(tr => {
+      const spSearch = encodeURIComponent(decodeURIComponent(artistEnc)+' '+tr.title);
+      const ytSearch = encodeURIComponent(decodeURIComponent(artistEnc)+' '+tr.title);
+      return `<div class="track-item">
+        <span class="track-item-title">${tr.position ? '<span style="color:var(--muted);margin-right:6px">'+esc(tr.position)+'</span>' : ''}${esc(tr.title)}</span>
+        <div class="track-item-links">
+          <a class="mini-link sp" href="https://open.spotify.com/search/${spSearch}" target="_blank" title="Zoek op Spotify">SP</a>
+          <a class="mini-link yt" href="https://www.youtube.com/results?search_query=${ytSearch}" target="_blank" title="Zoek op YouTube">YT</a>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    const artist = decodeURIComponent(artistEnc);
+    const title = decodeURIComponent(titleEnc);
+    tl.innerHTML = `<div class="track-item" style="color:var(--muted);font-size:10px">
+      Tracklist niet beschikbaar.
+      <a class="mini-link yt" href="https://www.youtube.com/results?search_query=${encodeURIComponent(artist+' '+title)}" target="_blank" style="margin-left:8px">YT</a>
+      <a class="mini-link" href="https://www.discogs.com/release/${releaseId}" target="_blank" style="margin-left:4px">Discogs</a>
+    </div>`;
+  }
+}
+
+// ============================================================
+// SAVED TRACKS
+// ============================================================
+async function saveDiscoverTrack(rec) {
+  const existing = state.savedTracks.find(t=>t.id===rec.id);
+  if(existing) return; // already saved
+  const saved = {
+    id: rec.id || ('saved_'+Date.now()),
+    artist: rec.artist,
+    title: rec.title,
+    label: rec.label||'',
+    year: rec.year||'',
+    why: rec.why||'',
+    context: rec.context||'',
+    spotify_url: rec.spotify_url||null,
+    discogs_url: rec.discogs_url||null,
+    youtube_search: rec.youtube_search||null,
+    dateAdded: new Date().toISOString().slice(0,10),
+    _source: 'saved'
+  };
+  state.savedTracks.unshift(saved);
+  await persist('crate_saved', state.savedTracks);
+}
+
+async function removeSavedTrack(id) {
+  state.savedTracks = state.savedTracks.filter(t=>t.id!==id);
+  await persist('crate_saved', state.savedTracks);
+  renderCollection();
+}
+
+// ============================================================
+// PLAYLISTS
+// ============================================================
+function showCreatePlaylist() {
+  document.getElementById('playlistNameInput').value = '';
+  document.getElementById('playlistModalTitle').textContent = 'NIEUWE PLAYLIST';
+  document.getElementById('playlistModal').classList.add('active');
+}
+function closePlaylistModal() { document.getElementById('playlistModal').classList.remove('active'); }
+
+async function savePlaylist() {
+  const name = document.getElementById('playlistNameInput').value.trim();
+  if(!name) return;
+  const pl = { id: 'pl_'+Date.now(), name, tracks: [], dateCreated: new Date().toISOString().slice(0,10) };
+  state.playlists.push(pl);
+  await persist('crate_playlists', state.playlists);
+  closePlaylistModal();
+  renderPlaylists();
+}
+
+async function deletePlaylist(id) {
+  if(!confirm('Playlist verwijderen?')) return;
+  state.playlists = state.playlists.filter(p=>p.id!==id);
+  await persist('crate_playlists', state.playlists);
+  renderPlaylists();
+}
+
+function openAddToPlaylistModal(track) {
+  state.addToPlaylistTrack = track;
+  document.getElementById('addToPlaylistTrackInfo').textContent = `${track.artist} — ${track.title}`;
+  const choices = document.getElementById('playlistChoices');
+  if(!state.playlists.length) {
+    choices.innerHTML = '<div style="color:var(--muted);font-size:11px;padding:8px">Nog geen playlists. Maak er eerst één aan via het PLAYLISTS-tabblad.</div>';
+  } else {
+    choices.innerHTML = state.playlists.map(pl=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;border-bottom:1px solid var(--border)">
+        <span style="font-size:12px">${esc(pl.name)} <span style="color:var(--muted);font-size:10px">(${pl.tracks.length} tracks)</span></span>
+        <button class="filter-btn" style="border-color:var(--accent);color:var(--accent)" onclick="addTrackToPlaylist('${pl.id}')">TOEVOEGEN</button>
+      </div>`).join('');
+  }
+  document.getElementById('addToPlaylistModal').classList.add('active');
+}
+
+function closeAddToPlaylistModal() { document.getElementById('addToPlaylistModal').classList.remove('active'); }
+
+async function addTrackToPlaylist(playlistId) {
+  const track = state.addToPlaylistTrack;
+  if(!track) return;
+  const pl = state.playlists.find(p=>p.id===playlistId);
+  if(!pl) return;
+  const already = pl.tracks.find(t=>t.id===track.id);
+  if(already) { closeAddToPlaylistModal(); return; }
+  pl.tracks.push({
+    id: track.id,
+    source: track._source || state.source,
+    artist: track.artist,
+    title: track.title,
+    label: track.label||'',
+    year: track.year||'',
+    spotify_url: track.spotify_url || (state.source==='spotify' ? `https://open.spotify.com/track/${track.id}` : null),
+    discogs_url: track.discogs_url || (state.source==='discogs' ? `https://www.discogs.com/release/${track.id}` : null)
+  });
+  await persist('crate_playlists', state.playlists);
+  closeAddToPlaylistModal();
+  renderPlaylists();
+}
+
+async function removeFromPlaylist(playlistId, trackId) {
+  const pl = state.playlists.find(p=>p.id===playlistId);
+  if(!pl) return;
+  pl.tracks = pl.tracks.filter(t=>t.id!==trackId);
+  await persist('crate_playlists', state.playlists);
+  renderPlaylists();
+}
+
+function renderPlaylists() {
+  const container = document.getElementById('playlistsContainer');
+  if(!state.playlists.length) {
+    container.innerHTML = `<div class="empty-state"><div class="icon">▶</div><p>Nog geen playlists. Klik + NIEUWE PLAYLIST om te beginnen.</p><p style="margin-top:8px;font-size:10px;color:var(--muted)">Voeg tracks toe vanuit je Discogs, Spotify of Opgeslagen collectie via de + knop.</p></div>`;
+    return;
+  }
+  container.innerHTML = state.playlists.map(pl => `
+    <div class="playlist-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <div class="playlist-name">${esc(pl.name)}</div>
+        <button class="filter-btn" style="color:var(--red);border-color:var(--red)" onclick="deletePlaylist('${pl.id}')">VERWIJDEREN</button>
+      </div>
+      <div class="playlist-meta">${pl.tracks.length} track${pl.tracks.length!==1?'s':''} • aangemaakt ${pl.dateCreated}</div>
+      ${pl.tracks.length ? pl.tracks.map(t => {
+        const spLink = t.spotify_url ? `<a class="mini-link sp" href="${t.spotify_url}" target="_blank">▶ SP</a>` : '';
+        const ytLink = `<a class="mini-link yt" href="https://www.youtube.com/results?search_query=${encodeURIComponent(t.artist+' '+t.title)}" target="_blank">YT</a>`;
+        const dcLink = t.discogs_url ? `<a class="mini-link" href="${t.discogs_url}" target="_blank" style="color:var(--accent);border-color:rgba(232,255,0,0.3)">D</a>` : '';
+        return `<div class="playlist-track-row">
+          <span style="color:var(--muted);font-size:10px;width:24px;flex-shrink:0">${pl.tracks.indexOf(t)+1}</span>
+          <span style="flex:1"><strong>${esc(t.artist)}</strong> — ${esc(t.title)}<span style="color:var(--muted)"> • ${t.label} ${t.year}</span></span>
+          <div class="track-item-links" style="gap:4px">${spLink}${ytLink}${dcLink}
+            <button class="mini-link" style="border-color:var(--red);color:var(--red);cursor:pointer" onclick="removeFromPlaylist('${pl.id}','${t.id}')">✕</button>
+          </div>
+        </div>`;
+      }).join('') : '<div style="color:var(--muted);font-size:11px;padding:8px 0">Nog geen tracks. Voeg toe via de + knop in je collectie.</div>'}
+    </div>`).join('');
+}
 
 // ============================================================
 // TAG MODAL
@@ -1292,284 +963,151 @@ function openTagModal(record) {
   state.modalTags = state.tags[record.id] ? {...state.tags[record.id]} : {};
   document.getElementById('modalTrackInfo').textContent = `${record.artist} — ${record.title} (${record.label}, ${record.year})`;
   document.querySelectorAll('.tag-opt').forEach(btn => {
-    const group = btn.dataset.group;
-    const val = btn.dataset.val;
-    btn.classList.toggle('selected', state.modalTags[group] === val);
+    btn.classList.toggle('selected', state.modalTags[btn.dataset.group]===btn.dataset.val);
   });
   document.getElementById('tagModal').classList.add('active');
 }
-
 function closeModal() { document.getElementById('tagModal').classList.remove('active'); }
-
 function toggleTag(btn) {
-  const group = btn.dataset.group;
-  const val = btn.dataset.val;
-  if(state.modalTags[group] === val) {
-    delete state.modalTags[group];
-    btn.classList.remove('selected');
-  } else {
+  const group=btn.dataset.group, val=btn.dataset.val;
+  if(state.modalTags[group]===val) { delete state.modalTags[group]; btn.classList.remove('selected'); }
+  else {
     document.querySelectorAll(`.tag-opt[data-group="${group}"]`).forEach(b=>b.classList.remove('selected'));
-    state.modalTags[group] = val;
-    btn.classList.add('selected');
+    state.modalTags[group]=val; btn.classList.add('selected');
   }
 }
-
-function saveTag() {
+async function saveTag() {
   if(state.modalTrack) {
     if(Object.keys(state.modalTags).length===0) delete state.tags[state.modalTrack.id];
     else state.tags[state.modalTrack.id] = state.modalTags;
-    localStorage.setItem('crate_tags', JSON.stringify(state.tags));
+    await persist('crate_tags', state.tags);
   }
-  closeModal();
-  renderCollection();
-  renderProfile();
+  closeModal(); renderCollection(); renderProfile();
 }
-
-function quickStar(id) {
-  const t = state.tags[id] || {};
-  if(t.status === 'ref') { delete t.status; }
-  else { t.status = 'ref'; }
-  if(Object.keys(t).length===0) delete state.tags[id];
-  else state.tags[id] = t;
-  localStorage.setItem('crate_tags', JSON.stringify(state.tags));
-  renderCollection();
-  renderProfile();
+async function quickStar(id) {
+  const t = state.tags[id]||{};
+  if(t.status==='ref') delete t.status; else t.status='ref';
+  if(Object.keys(t).length===0) delete state.tags[id]; else state.tags[id]=t;
+  await persist('crate_tags', state.tags);
+  renderCollection(); renderProfile();
 }
 
 // ============================================================
 // PROFILE
 // ============================================================
 function renderProfile() {
-  // Top labels
-  const lc = {};
-  DISCOGS_RAW.forEach(r=>{ const l=r.label.split(',')[0].trim(); lc[l]=(lc[l]||0)+1; });
-  const topL = Object.entries(lc).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  const maxL = topL[0][1];
-  document.getElementById('topLabels').innerHTML = topL.map(([l,c])=>`
-    <div class="bar-row">
-      <div class="bar-label" title="${l}">${l.length>12?l.slice(0,12)+'…':l}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${c/maxL*100}%"></div></div>
-      <div class="bar-val">${c}</div>
-    </div>`).join('');
-
-  // Top genres
-  const gc = {};
-  SPOTIFY_RAW.forEach(r=>(r.genres||[]).forEach(g=>{ gc[g]=(gc[g]||0)+1; }));
-  const topG = Object.entries(gc).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  const maxG = topG[0]?.[1]||1;
-  document.getElementById('topGenres').innerHTML = topG.map(([g,c])=>`
-    <div class="bar-row">
-      <div class="bar-label" title="${g}">${g.length>14?g.slice(0,14)+'…':g}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${c/maxG*100}%"></div></div>
-      <div class="bar-val">${c}</div>
-    </div>`).join('');
-
-  // BPM dist
-  const bpmRanges = [['<115',0,115],['115-120',115,120],['120-125',120,125],['125-130',125,130],['130-135',130,135],['>135',135,999]];
-  const bpmCounts = bpmRanges.map(([l,lo,hi])=>[l,SPOTIFY_RAW.filter(r=>r.bpm>=lo&&r.bpm<hi).length]);
-  const maxBpm = Math.max(...bpmCounts.map(x=>x[1]));
-  document.getElementById('bpmDist').innerHTML = bpmCounts.map(([l,c])=>`
-    <div class="bar-row">
-      <div class="bar-label">${l}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${c/maxBpm*100}%;background:var(--accent2)"></div></div>
-      <div class="bar-val">${c}</div>
-    </div>`).join('');
-
-  // Audio DNA
-  const avgEnergy = Math.round(SPOTIFY_RAW.reduce((s,r)=>s+r.energy,0)/SPOTIFY_RAW.length);
-  const avgDance = Math.round(SPOTIFY_RAW.reduce((s,r)=>s+r.danceability,0)/SPOTIFY_RAW.length);
-  const avgInst = Math.round(SPOTIFY_RAW.reduce((s,r)=>s+r.instrumentalness,0)/SPOTIFY_RAW.length);
-  const dna = [['Energie',avgEnergy],['Danceability',avgDance],['Instrumentaal',avgInst],['Hypnotisch',82],['Donker',74]];
-  document.getElementById('audioDna').innerHTML = dna.map(([l,v])=>`
-    <div class="bar-row">
-      <div class="bar-label">${l}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${v}%;background:var(--green)"></div></div>
-      <div class="bar-val">${v}%</div>
-    </div>`).join('');
-
-  // North stars
-  const stars = Object.entries(state.tags).filter(([id,t])=>t.status==='ref');
-  const allData = [...DISCOGS_RAW, ...SPOTIFY_RAW];
-  const starTracks = stars.map(([id])=>allData.find(r=>r.id===id)).filter(Boolean);
-
-  if(starTracks.length===0) {
-    document.getElementById('northStars').innerHTML = `<div class="empty-state" style="padding:20px"><div class="icon">⭐</div><p>Nog geen north stars. Klik ⭐ bij tracks in je collectie.</p></div>`;
-  } else {
-    document.getElementById('northStars').innerHTML = starTracks.map(r=>`
-      <div class="north-star">
-        <div class="star-icon">⭐</div>
-        <div class="star-info">
-          <div class="star-title">${esc(r.title)}</div>
-          <div class="star-sub">${esc(r.artist)} • ${r.label.split(',')[0]} • ${r.year}</div>
-        </div>
-      </div>`).join('');
-  }
-
-  // Generate profile text
-  generateProfileText(topL, topG, bpmCounts, starTracks);
+  const lc={};
+  DISCOGS_RAW.forEach(r=>{const l=r.label.split(',')[0].trim();lc[l]=(lc[l]||0)+1;});
+  const topL=Object.entries(lc).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const maxL=topL[0][1];
+  document.getElementById('topLabels').innerHTML=topL.map(([l,c])=>`<div class="bar-row"><div class="bar-label" title="${l}">${l.length>12?l.slice(0,12)+'…':l}</div><div class="bar-track"><div class="bar-fill" style="width:${c/maxL*100}%"></div></div><div class="bar-val">${c}</div></div>`).join('');
+  const gc={};
+  SPOTIFY_RAW.forEach(r=>(r.genres||[]).forEach(g=>{gc[g]=(gc[g]||0)+1;}));
+  const topG=Object.entries(gc).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const maxG=topG[0]?.[1]||1;
+  document.getElementById('topGenres').innerHTML=topG.map(([g,c])=>`<div class="bar-row"><div class="bar-label" title="${g}">${g.length>14?g.slice(0,14)+'…':g}</div><div class="bar-track"><div class="bar-fill" style="width:${c/maxG*100}%"></div></div><div class="bar-val">${c}</div></div>`).join('');
+  const bpmRanges=[['<115',0,115],['115-120',115,120],['120-125',120,125],['125-130',125,130],['130-135',130,135],['>135',135,999]];
+  const bpmCounts=bpmRanges.map(([l,lo,hi])=>[l,SPOTIFY_RAW.filter(r=>r.bpm>=lo&&r.bpm<hi).length]);
+  const maxBpm=Math.max(...bpmCounts.map(x=>x[1]));
+  document.getElementById('bpmDist').innerHTML=bpmCounts.map(([l,c])=>`<div class="bar-row"><div class="bar-label">${l}</div><div class="bar-track"><div class="bar-fill" style="width:${c/maxBpm*100}%;background:var(--accent2)"></div></div><div class="bar-val">${c}</div></div>`).join('');
+  const avgE=Math.round(SPOTIFY_RAW.reduce((s,r)=>s+r.energy,0)/SPOTIFY_RAW.length);
+  const avgD=Math.round(SPOTIFY_RAW.reduce((s,r)=>s+r.danceability,0)/SPOTIFY_RAW.length);
+  const avgI=Math.round(SPOTIFY_RAW.reduce((s,r)=>s+r.instrumentalness,0)/SPOTIFY_RAW.length);
+  document.getElementById('audioDna').innerHTML=[['Energie',avgE],['Danceability',avgD],['Instrumentaal',avgI],['Hypnotisch',82],['Donker',74]].map(([l,v])=>`<div class="bar-row"><div class="bar-label">${l}</div><div class="bar-track"><div class="bar-fill" style="width:${v}%;background:var(--green)"></div></div><div class="bar-val">${v}%</div></div>`).join('');
+  const allData=[...DISCOGS_RAW,...SPOTIFY_RAW];
+  const starTracks=Object.entries(state.tags).filter(([id,t])=>t.status==='ref').map(([id])=>allData.find(r=>r.id===id)).filter(Boolean);
+  document.getElementById('northStars').innerHTML=starTracks.length?starTracks.map(r=>`<div class="north-star"><div class="star-icon">⭐</div><div class="star-info"><div class="star-title">${esc(r.title)}</div><div class="star-sub">${esc(r.artist)} • ${r.label.split(',')[0]} • ${r.year}</div></div></div>`).join(''):`<div class="empty-state" style="padding:20px"><div class="icon">⭐</div><p>Nog geen north stars. Klik ⭐ bij tracks.</p></div>`;
+  const peakBpm=bpmCounts.sort((a,b)=>b[1]-a[1])[0]?.[0]||'125-130';
+  const text=`SMAAKPROFIEL — AMIL G\nDatum: ${new Date().toLocaleDateString('nl-BE')}\n\n=== TOPLABELS ===\n${topL.slice(0,6).map(([l,c])=>`  - ${l} (${c})`).join('\n')}\n\n=== TOPGENRES ===\n${topG.slice(0,6).map(([g,c])=>`  - ${g} (${c})`).join('\n')}\n\n=== NORTH STARS ===\n${starTracks.length?starTracks.map(r=>`  - ${r.artist} — ${r.title} (${r.label.split(',')[0]}, ${r.year})`).join('\n'):'  (geen)'}\n\n=== BPM SWEETSPOT: ${peakBpm} ===\n\n=== NIET WILLEN ===\n  - Progressive house / trance\n  - "Uplifting" / "Anthemic"\n  - Major label reissues\n  - EDM / big room`;
+  document.getElementById('profileText').value=text;
 }
-
-function generateProfileText(topL, topG, bpmCounts, stars) {
-  const starText = stars.length ? stars.map(r=>`  - ${r.artist} — ${r.title} (${r.label.split(',')[0]}, ${r.year})`).join('\n') : '  (nog geen north stars — voeg toe via ⭐)';
-  const peakBpm = bpmCounts.sort((a,b)=>b[1]-a[1])[0]?.[0] || '125-130';
-  const text = `SMAAKPROFIEL — AMIL G (gegenereerd door CRATEDIGGER)
-Datum: ${new Date().toLocaleDateString('nl-BE')}
-
-=== WAT IK ZOEK ===
-Ik ben een DJ gespecialiseerd in house, techno, deep house, disco en soul.
-Ik focus op oudere muziek (late 80s–90s), moeilijk digitaal vindbaar.
-Mijn BPM-sweetspot zit in de ${peakBpm} range.
-
-=== NORTH STAR TRACKS ===
-${starText}
-
-=== TOPLABELS (Discogs collectie) ===
-${topL.slice(0,6).map(([l,c])=>`  - ${l} (${c} releases)`).join('\n')}
-
-=== TOPGENRES (Spotify) ===
-${topG.slice(0,6).map(([g,c])=>`  - ${g} (${c} tracks)`).join('\n')}
-
-=== AUDIO DNA ===
-  Gemiddeld instrumentaal: 77%+ (weinig vocals, veel textuur)
-  Energie: ~72% (niet maximaal agressief, wel present)
-  Danceability: ~71% (groove-gericht, niet gehaast)
-
-=== CONTEXTEN ===
-  WARM-UP: traag opbouwend, minimaal, ruimtelijk, laag energie
-            hypnotisch, 115–124 BPM, laat de ruimte ademen
-  PEAK:     gedreven, percussief, 125–130 BPM, hypnotisch
-            acid-invloeden welkom, strak maar organisch
-  CLOSING:  nostalgisch, soul-invloeden, emotioneel
-            mag langzamer, mag een stem hebben
-
-=== WAT IK NIET WIL ===
-  - Progressive house of trance-invloeden
-  - Tracks beschreven als "uplifting" of "anthemic"
-  - Major label reissues zonder originele context
-  - EDM, big room, mainstream
-
-=== ONTDEKKINGSSTRATEGIE ===
-  Gebruik labels, producernetwerken, RateYourMusic lijsten.
-  Lees Discogs-commentaren en YouTube mix-comments.
-  Focus op labels verwant aan mijn toplabels.
-  Zoek via het netwerk van artiesten die ik al ken.`;
-
-  document.getElementById('profileText').value = text;
-}
-
-function copyProfile() {
+function copyProfile(btn) {
   navigator.clipboard.writeText(document.getElementById('profileText').value);
-  const btn = event.target;
-  btn.textContent = '✓ GEKOPIEERD';
+  btn.textContent='✓ GEKOPIEERD';
   setTimeout(()=>btn.textContent='KOPIEER PROFIEL',2000);
 }
 
 // ============================================================
 // PROXY SETUP
 // ============================================================
-function initProxy() {
-  const saved = localStorage.getItem('crate_proxy_url') || '';
+async function initProxy() {
+  // Try to load from shared storage first (cross-device), fallback to localStorage
+  let url = await DB.get('crate_proxy_url');
+  if(!url) url = DB.getLocal('crate_proxy_url');
   const input = document.getElementById('proxyUrlInput');
   const banner = document.getElementById('proxyBanner');
   const status = document.getElementById('proxyStatus');
-  if (input) input.value = saved;
-  if (saved && banner && status) {
-    status.textContent = '✓ Proxy URL opgeslagen: ' + saved;
+  if(url) {
+    input.value = url;
+    status.textContent = '✓ Worker URL geladen: ' + url;
     status.style.color = 'var(--green)';
+    banner.classList.add('hidden');
   }
 }
-
-function saveProxyUrl() {
+async function saveProxyUrl() {
   const url = document.getElementById('proxyUrlInput').value.trim();
   const status = document.getElementById('proxyStatus');
-  if (!url.startsWith('http')) {
+  if(!url.startsWith('http')) {
     status.textContent = '⚠ Voer een geldige URL in (begint met https://)';
-    status.style.color = 'var(--red)';
-    return;
+    status.style.color = 'var(--red)'; return;
   }
-  localStorage.setItem('crate_proxy_url', url);
-  status.textContent = '✓ Opgeslagen! Je kan nu DIG gebruiken.';
+  DB.setLocal('crate_proxy_url', url);
+  await DB.set('crate_proxy_url', url); // sync cross-device
+  status.textContent = '✓ Opgeslagen en gesynchroniseerd over al je toestellen!';
   status.style.color = 'var(--green)';
+  setTimeout(() => document.getElementById('proxyBanner').classList.add('hidden'), 1500);
 }
-
 function getProxyUrl() {
-  return localStorage.getItem('crate_proxy_url') || '';
+  return DB.getLocal('crate_proxy_url') || '';
 }
 
 // ============================================================
-// DISCOVER — via Cloudflare Worker proxy met web search
+// DISCOVER
 // ============================================================
 async function runDiscover() {
-  const ctx = document.getElementById('discoverContext').value;
-  const focus = document.getElementById('discoverFocus').value;
-  const mode = document.getElementById('discoverMode').value;
-  const extra = document.getElementById('discoverExtra').value;
+  const ctx=document.getElementById('discoverContext').value;
+  const focus=document.getElementById('discoverFocus').value;
+  const mode=document.getElementById('discoverMode').value;
+  const extra=document.getElementById('discoverExtra').value;
+  const btn=document.getElementById('discoverBtn');
+  const loading=document.getElementById('discoverLoading');
+  btn.disabled=true; loading.classList.add('active');
+  document.getElementById('discoverResults').innerHTML='';
 
-  const btn = document.getElementById('discoverBtn');
-  const loading = document.getElementById('discoverLoading');
-  const pending = document.getElementById('discoverPending');
+  const lc={};
+  DISCOGS_RAW.forEach(r=>{const l=r.label.split(',')[0].trim();lc[l]=(lc[l]||0)+1;});
+  const topLabels=Object.entries(lc).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([l])=>l).join(', ');
+  const allData=[...DISCOGS_RAW,...SPOTIFY_RAW];
+  const stars=Object.entries(state.tags).filter(([id,t])=>t.status==='ref').map(([id])=>allData.find(r=>r.id===id)).filter(Boolean).map(r=>`${r.artist} — ${r.title} (${r.label}, ${r.year})`).join('\n  ');
+  const negFeedback=state.feedback.filter(f=>f.verdict==='no').slice(0,10).map(f=>`  - ${f.track}${f.reason?' ('+f.reason+')':''}`).join('\n');
 
-  btn.disabled = true;
-  loading.classList.add('active');
+  const contextMap={warmup:'WARM-UP — traag, ruimtelijk, minimaal, 115–124 BPM',peak:'PEAK — gedreven, percussief, hypnotisch, 125–130 BPM',closing:'CLOSING — nostalgisch, emotioneel, soul, langzamer'};
+  const focusMap={chicago:'Chicago House (late 80s–93) — Trax, DJ International, Dance Mania, Nu Groove',detroit:'Detroit Techno — Metroplex, Planet E, KMS, Submerge, 430 West',acid:'Acid House 303 — R&S, Djax, Strictly Rhythm',disco_soul:'Disco/Soul-geïnspireerd — West End, Salsoul, Gold Fingers',deep:'Deep/Soulful House — King Street, Nite Grooves, Soulfuric',tribal:'Tribal/Percussief — Tribal America, Tribal UK, Yoshitoshi',ambient:'Ambient/Ruimtelijk — Fax +49, Peacefrog, Delsin'};
+  const modeMap={similar:'vergelijkbaar met collectie',adjacent:'grensgebieden/verrassend',labels:'andere releases van mijn toplabels',network:'via producersnetwerk'};
 
-  // Build profile snapshot
-  const lc = {};
-  DISCOGS_RAW.forEach(r=>{ const l=r.label.split(',')[0].trim(); lc[l]=(lc[l]||0)+1; });
-  const topLabels = Object.entries(lc).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([l])=>l).join(', ');
-
-  const allData = [...DISCOGS_RAW, ...SPOTIFY_RAW];
-  const collectionIds = new Set(DISCOGS_RAW.map(r=>r.id));
-
-  const stars = Object.entries(state.tags).filter(([id,t])=>t.status==='ref')
-    .map(([id])=>allData.find(r=>r.id===id)).filter(Boolean)
-    .map(r=>`${r.artist} — ${r.title} (${r.label}, ${r.year})`).join('\n  ');
-
-  const negFeedback = state.feedback.filter(f=>f.verdict==='no').slice(0,10)
-    .map(f=>`  - ${f.track}${f.reason?' (reden: '+f.reason+')':''}`).join('\n');
-
-  const contextMap = {
-    warmup: 'WARM-UP — traag opbouwend, ruimtelijk, minimaal, laag energie, 115–124 BPM',
-    peak: 'PEAK TIME — gedreven, percussief, hypnotisch, 125–130 BPM, acid-invloeden welkom',
-    closing: 'CLOSING — nostalgisch, emotioneel, soul-invloeden, mag langzamer'
-  };
-  const focusMap = {
-    chicago: 'Chicago House (late 80s–93) — labels: Trax, DJ International, Dance Mania, Nu Groove, Prescription',
-    detroit: 'Detroit Techno / Deep Tech — labels: Metroplex, Planet E, KMS, Submerge, 430 West',
-    acid: 'Acid House / 303-gebaseerd — labels: R&S, Djax, Strictly Rhythm, Attack Records',
-    disco_soul: 'Disco & Soul-geïnspireerde house — labels: West End, Salsoul, Gold Fingers, Prelude',
-    deep: 'Deep / Soulful House — labels: King Street, Nite Grooves, Soulfuric, Balance Prescription',
-    tribal: 'Tribal / Percussieve House — labels: Tribal America, Tribal UK, Yoshitoshi, Twisted America',
-    ambient: 'Ambient / Ruimtelijke Electronica — labels: Fax +49, Peacefrog, Delsin, Chain Reaction'
-  };
-  const modeMap = {
-    similar: 'vergelijkbaar met bestaande collectie — zelfde sfeer, andere artiesten',
-    adjacent: 'grensgebieden en verrassende adjacenties — onverwacht maar passend',
-    labels: 'andere releases van de toplabels uit mijn collectie die ik nog niet heb',
-    network: 'via het netwerk van producers en artiesten die ik al ken — wie kenden zij, wie sampleden zij'
-  };
-
-  // Build the chat message
-  const msg = `Zoek 6 geverifieerde muziekaanbevelingen voor een Belgische DJ.
+  const msg=`Zoek 6 geverifieerde muziekaanbevelingen voor een Belgische DJ.
 
 SMAAKPROFIEL:
-- Toplabels in collectie: ${topLabels}
-- North star tracks: ${stars || 'nog niet ingesteld'}
-- BPM gemiddeld: 127.6 | Genres: acid house, chicago house, dub techno, minimal techno, jazz house, tribal house
-${negFeedback ? '- Eerder afgewezen: ' + negFeedback : ''}
+- Toplabels: ${topLabels}
+- North stars: ${stars||'niet ingesteld'}
+- BPM: 127.6 gem. | Genres: acid house, chicago house, dub techno, minimal techno, jazz house
+${negFeedback?'- Eerder afgewezen:\n'+negFeedback:''}
 
 GEVRAAGD:
-- Context: ${ctx ? contextMap[ctx] : 'vrij'}
-- Focus: ${focus ? focusMap[focus] : 'vrij — mix van sterkste genres'}
+- Context: ${ctx?contextMap[ctx]:'vrij'}
+- Focus: ${focus?focusMap[focus]:'vrij'}
 - Modus: ${modeMap[mode]}
-${extra ? '- Extra instructie: ' + extra : ''}
+${extra?'- Extra: '+extra:''}
 
-Gebruik web search om elke track te verifiëren op Discogs. Hallucnineer nooit.
-Antwoord als JSON array (zie system prompt voor exact formaat).`;
+Gebruik web search om elke track te verifiëren op Discogs.
+Geef indien beschikbaar ook een directe Spotify track URL (spotify.com/track/...) en een Discogs release URL.
+Antwoord als JSON array (zie system prompt).`;
 
-  const systemPrompt = `Je bent een expert muziekcurator voor een Belgische DJ (house, techno, deep house, disco, soul).
-Gebruik web search om elke aanbeveling te VERIFIËREN op Discogs voordat je hem geeft.
-Hallucineer NOOIT — als je een track niet kan verifiëren via web search, sla hem over en zoek een andere.
-Antwoord uitsluitend met een geldige JSON-array, geen tekst erbuiten, in dit formaat:
+  const systemPrompt=`Je bent een expert muziekcurator voor een Belgische DJ (house, techno, deep house, disco, soul).
+Gebruik web search om elke aanbeveling te VERIFIËREN op Discogs. Hallucineer NOOIT.
+Geef ALLEEN tracks die aantoonbaar bestaan.
+Geef indien beschikbaar de directe Spotify URL (https://open.spotify.com/track/ID) — alleen als je zeker weet dat het nummer op Spotify staat.
+Antwoord uitsluitend met een geldige JSON-array, geen tekst erbuiten:
 [
   {
     "artist": "Artiest",
@@ -1579,137 +1117,86 @@ Antwoord uitsluitend met een geldige JSON-array, geen tekst erbuiten, in dit for
     "why": "Waarom dit past: beschrijf het geluid via reviews en culturele context",
     "context": "warmup",
     "discogs_url": "https://www.discogs.com/release/...",
+    "spotify_url": "https://open.spotify.com/track/..." ,
     "youtube_search": "artiest tracktitel label jaar"
   }
-]`;
+]
+Als een track niet op Spotify staat, laat spotify_url weg (null).`;
 
-  // Check proxy URL
-  const proxyUrl = getProxyUrl();
-  if (!proxyUrl) {
-    loading.classList.remove('active');
-    btn.disabled = false;
-    document.getElementById('discoverResults').innerHTML = `<div class="empty-state">
-      <div class="icon">⚙️</div>
-      <p>Stel eerst je Cloudflare Worker URL in bovenaan deze pagina.</p>
-    </div>`;
+  const proxyUrl=getProxyUrl();
+  if(!proxyUrl) {
+    loading.classList.remove('active'); btn.disabled=false;
+    document.getElementById('proxyBanner').classList.remove('hidden');
+    document.getElementById('discoverResults').innerHTML='<div class="empty-state"><div class="icon">⚙️</div><p>Stel eerst je Cloudflare Worker URL in bovenaan.</p></div>';
     return;
   }
 
-  // Call proxy
   try {
-    const res = await fetch(proxyUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: [{ role: 'user', content: msg }], system: systemPrompt })
-    });
-
-    if (!res.ok) {
-      const errText = await res.text();
-      throw new Error('Proxy status ' + res.status + ': ' + errText.slice(0,200));
-    }
-
-    const data = await res.json();
-
-    // Anthropic met web search geeft meerdere content-blokken terug
-    // We willen alleen de tekst-blokken, samengevoegd
-    const fullText = (data.content || [])
-      .filter(b => b.type === 'text')
-      .map(b => b.text)
-      .join('\n');
-
-    if (!fullText) throw new Error('Leeg antwoord van AI. Controleer je API key in Cloudflare.');
-
-    // Probeer JSON te parsen — meerdere fallbacks
-    let recs = [];
+    const res=await fetch(proxyUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:msg}],system:systemPrompt})});
+    if(!res.ok){const e=await res.text();throw new Error('Proxy status '+res.status+': '+e.slice(0,200));}
+    const data=await res.json();
+    const fullText=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
+    if(!fullText) throw new Error('Leeg antwoord. Controleer API key in Cloudflare.');
+    let recs=[];
     try {
-      const codeMatch = fullText.match(/```json\s*([\s\S]*?)```/);
-      if (codeMatch) {
-        recs = JSON.parse(codeMatch[1].trim());
-      } else {
-        const arrStart = fullText.indexOf('[');
-        const arrEnd = fullText.lastIndexOf(']');
-        if (arrStart !== -1 && arrEnd !== -1) {
-          recs = JSON.parse(fullText.slice(arrStart, arrEnd + 1));
-        }
-      }
-    } catch(parseErr) {
-      throw new Error('Kon AI-antwoord niet parsen: ' + fullText.slice(0, 200));
-    }
-
-    if (!recs.length) throw new Error('AI stuurde een leeg resultaat. Probeer opnieuw of pas de zoekopdracht aan.');
+      const m=fullText.match(/```json\s*([\s\S]*?)```/);
+      if(m){recs=JSON.parse(m[1].trim());}
+      else{const a=fullText.indexOf('['),z=fullText.lastIndexOf(']');if(a!==-1&&z!==-1)recs=JSON.parse(fullText.slice(a,z+1));}
+    } catch(pe){throw new Error('Parse fout: '+fullText.slice(0,200));}
+    if(!recs.length) throw new Error('Leeg resultaat. Probeer opnieuw.');
     renderDiscoverResults(recs);
-
   } catch(e) {
-    document.getElementById('discoverResults').innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>Fout bij verbinden met proxy.</p><p style="margin-top:8px;font-size:11px;color:var(--text);background:var(--surface2);padding:8px;line-height:1.6">' + e.message + '</p></div>';
+    document.getElementById('discoverResults').innerHTML='<div class="empty-state"><div class="icon">⚠️</div><p>Fout bij proxy.</p><p style="margin-top:8px;font-size:11px;color:var(--text);background:var(--surface2);padding:8px;line-height:1.6">'+e.message+'</p></div>';
   }
-
-  loading.classList.remove('active');
-  btn.disabled = false;
+  loading.classList.remove('active'); btn.disabled=false;
 }
-
-// Poll the parent page for CRATEDIGGER_RESULTS in Claude's response
-// (sendPrompt listeners removed — using proxy instead)
 
 function renderDiscoverResults(recs) {
-  const results = document.getElementById('discoverResults');
-  if(!recs?.length) {
-    results.innerHTML = `<div class="empty-state"><div class="icon">🎵</div><p>Geen resultaten ontvangen.</p></div>`;
-    return;
-  }
-
-  results.innerHTML = `
-    <div style="margin-bottom:12px;font-size:11px;color:var(--muted);letter-spacing:1px">
-      ${recs.length} GEVERIFIEERDE AANBEVELINGEN — beoordeel elke track om het systeem te verfijnen
-    </div>
-    <div class="results-grid">
-      ${recs.map((r,i) => {
-        const discogsHref = r.discogs_url
-          ? r.discogs_url
-          : `https://www.discogs.com/search/?q=${encodeURIComponent((r.discogs_search||r.artist+' '+r.title))}&type=release`;
-        const ytHref = `https://www.youtube.com/results?search_query=${encodeURIComponent(r.youtube_search||r.artist+' '+r.title)}`;
-        const rymHref = `https://rateyourmusic.com/search?searchterm=${encodeURIComponent(r.artist+' '+r.title)}&searchtype=l`;
-        const rData = JSON.stringify(r).replace(/"/g,'&quot;');
-        return `
-        <div class="result-card" id="card-${i}">
-          <div class="result-num">${String(i+1).padStart(2,'0')}</div>
-          <div class="result-title">${esc(r.artist)} — ${esc(r.title)}</div>
-          <div class="result-meta">${esc(r.label)} • ${r.year} • <span class="tag tag-${r.context||'peak'}" style="font-size:10px">${r.context||'—'}</span></div>
-          <div class="result-why">${esc(r.why)}</div>
-          <div class="result-links">
-            <a class="result-link" href="${discogsHref}" target="_blank">🔍 DISCOGS</a>
-            <a class="result-link" href="${ytHref}" target="_blank">▶ YOUTUBE</a>
-            <a class="result-link" href="${rymHref}" target="_blank">★ RYM</a>
-          </div>
-          <div class="feedback-btns">
-            <button class="fb-btn yes" onclick="giveFeedback(${i},'yes',${rData})">✓ JA</button>
-            <button class="fb-btn maybe" onclick="giveFeedback(${i},'maybe',${rData})">? MISSCHIEN</button>
-            <button class="fb-btn no" onclick="giveFeedback(${i},'no',${rData})">✕ NEE</button>
-          </div>
-        </div>`;
-      }).join('')}
+  const results=document.getElementById('discoverResults');
+  if(!recs?.length){results.innerHTML='<div class="empty-state"><div class="icon">🎵</div><p>Geen resultaten.</p></div>';return;}
+  results.innerHTML=`<div style="margin-bottom:12px;font-size:11px;color:var(--muted);letter-spacing:1px">${recs.length} GEVERIFIEERDE AANBEVELINGEN</div>
+  <div class="results-grid">
+  ${recs.map((r,i)=>{
+    const rData=JSON.stringify(r).replace(/"/g,'&quot;');
+    const isSaved=state.savedTracks.some(t=>t.artist===r.artist&&t.title===r.title);
+    const spLink=r.spotify_url?`<a class="result-link spotify" href="${r.spotify_url}" target="_blank">▶ SPOTIFY</a>`:'';
+    const ytLink=`<a class="result-link youtube" href="https://www.youtube.com/results?search_query=${encodeURIComponent(r.youtube_search||r.artist+' '+r.title)}" target="_blank">▶ YOUTUBE</a>`;
+    const dcLink=r.discogs_url?`<a class="result-link discogs" href="${r.discogs_url}" target="_blank">🔍 DISCOGS</a>`:`<a class="result-link discogs" href="https://www.discogs.com/search/?q=${encodeURIComponent(r.artist+' '+r.title)}&type=release" target="_blank">🔍 DISCOGS</a>`;
+    return `<div class="result-card" id="card-${i}">
+      <div class="result-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="result-title">${esc(r.artist)} — ${esc(r.title)}</div>
+      <div class="result-meta">${esc(r.label)} • ${r.year} • <span class="tag tag-${r.context||'peak'}" style="font-size:10px">${r.context||'—'}</span></div>
+      <div class="result-why">${esc(r.why)}</div>
+      <div class="result-links">${spLink}${ytLink}${dcLink}</div>
+      <button class="btn-save-track ${isSaved?'saved':''}" id="savebtn-${i}" onclick="saveFromDiscover(${i},${rData})">
+        ${isSaved?'✓ OPGESLAGEN IN COLLECTIE':'+ OPSLAAN IN COLLECTIE'}
+      </button>
+      <div class="feedback-btns">
+        <button class="fb-btn yes" onclick="giveFeedback(${i},'yes',${rData})">✓ JA</button>
+        <button class="fb-btn maybe" onclick="giveFeedback(${i},'maybe',${rData})">? MISSCHIEN</button>
+        <button class="fb-btn no" onclick="giveFeedback(${i},'no',${rData})">✕ NEE</button>
+      </div>
     </div>`;
+  }).join('')}
+  </div>`;
 }
 
-function giveFeedback(idx, verdict, rec) {
-  const card = document.getElementById(`card-${idx}`);
-  const btns = card.querySelectorAll('.fb-btn');
-  btns.forEach(b=>b.classList.add('voted'));
+async function saveFromDiscover(idx, rec) {
+  await saveDiscoverTrack(rec);
+  const btn=document.getElementById('savebtn-'+idx);
+  if(btn){btn.textContent='✓ OPGESLAGEN IN COLLECTIE';btn.classList.add('saved');}
+}
 
-  const colorMap = {yes:'var(--green)',maybe:'#ffaa00',no:'var(--red)'};
-  card.style.borderColor = colorMap[verdict];
-
-  // Ask for reason on "no"
-  let reason = '';
-  if(verdict==='no') {
-    reason = prompt(`Waarom past "${rec.title}" niet? (optioneel — helpt het systeem leren)`) || '';
-  }
-
-  state.feedback.unshift({
-    verdict, track: `${rec.artist} — ${rec.title}`,
-    label: rec.label, year: rec.year, context: rec.context,
-    reason, date: new Date().toLocaleDateString('nl-BE')
-  });
-  localStorage.setItem('crate_feedback', JSON.stringify(state.feedback.slice(0,100)));
+async function giveFeedback(idx,verdict,rec) {
+  const card=document.getElementById('card-'+idx);
+  card.querySelectorAll('.fb-btn').forEach(b=>b.classList.add('voted'));
+  const colorMap={yes:'var(--green)',maybe:'#ffaa00',no:'var(--red)'};
+  card.style.borderColor=colorMap[verdict];
+  let reason='';
+  if(verdict==='no') reason=prompt(`Waarom past "${rec.title}" niet?`)||'';
+  state.feedback.unshift({verdict,track:`${rec.artist} — ${rec.title}`,label:rec.label,year:rec.year,context:rec.context,reason,date:new Date().toLocaleDateString('nl-BE')});
+  state.feedback=state.feedback.slice(0,100);
+  await persist('crate_feedback',state.feedback);
   renderFeedback();
 }
 
@@ -1717,177 +1204,79 @@ function giveFeedback(idx, verdict, rec) {
 // FEEDBACK
 // ============================================================
 function renderFeedback() {
-  const log = document.getElementById('feedbackLog');
-  if(!state.feedback.length) {
-    log.innerHTML = `<div class="empty-state"><div class="icon">📊</div><p>Nog geen feedback. Beoordeel aanbevelingen in het Discover scherm.</p></div>`;
-    return;
-  }
-
-  const yes = state.feedback.filter(f=>f.verdict==='yes').length;
-  const no = state.feedback.filter(f=>f.verdict==='no').length;
-  const maybe = state.feedback.filter(f=>f.verdict==='maybe').length;
-
-  log.innerHTML = `
-    <div style="display:flex;gap:16px;margin-bottom:16px;padding:12px;background:var(--surface);border:1px solid var(--border)">
-      <div><span class="stat-val" style="color:var(--green)">${yes}</span> <span class="stat-label">ja</span></div>
-      <div><span class="stat-val" style="color:#ffaa00">${maybe}</span> <span class="stat-label">misschien</span></div>
-      <div><span class="stat-val" style="color:var(--red)">${no}</span> <span class="stat-label">nee</span></div>
-      <div><span class="stat-val">${Math.round(yes/(yes+no||1)*100)}%</span> <span class="stat-label">trefkans</span></div>
-    </div>
-    ${state.feedback.map(f=>`
-      <div class="log-entry">
-        <div class="log-verdict ${f.verdict}">${f.verdict.toUpperCase()}</div>
-        <div class="log-track">
-          <strong>${esc(f.track)}</strong>
-          <span style="color:var(--muted)"> • ${f.label||''} ${f.year||''} ${f.context?`• ${f.context}`:''}</span>
-          ${f.reason?`<br><span style="color:var(--muted);font-size:10px">↳ ${esc(f.reason)}</span>`:''}
-          <span style="float:right;color:var(--muted);font-size:10px">${f.date||''}</span>
-        </div>
-      </div>`).join('')}`;
+  const log=document.getElementById('feedbackLog');
+  if(!state.feedback.length){log.innerHTML='<div class="empty-state"><div class="icon">📊</div><p>Nog geen feedback.</p></div>';return;}
+  const yes=state.feedback.filter(f=>f.verdict==='yes').length;
+  const no=state.feedback.filter(f=>f.verdict==='no').length;
+  const maybe=state.feedback.filter(f=>f.verdict==='maybe').length;
+  log.innerHTML=`<div style="display:flex;gap:16px;margin-bottom:16px;padding:12px;background:var(--surface);border:1px solid var(--border)">
+    <div><span class="stat-val" style="color:var(--green)">${yes}</span> <span class="stat-label">ja</span></div>
+    <div><span class="stat-val" style="color:#ffaa00">${maybe}</span> <span class="stat-label">misschien</span></div>
+    <div><span class="stat-val" style="color:var(--red)">${no}</span> <span class="stat-label">nee</span></div>
+    <div><span class="stat-val">${Math.round(yes/(yes+no||1)*100)}%</span> <span class="stat-label">trefkans</span></div>
+  </div>
+  ${state.feedback.map(f=>`<div class="log-entry">
+    <div class="log-verdict ${f.verdict}">${f.verdict.toUpperCase()}</div>
+    <div class="log-track"><strong>${esc(f.track)}</strong>
+    <span style="color:var(--muted)"> • ${f.label||''} ${f.year||''} ${f.context?'• '+f.context:''}</span>
+    ${f.reason?`<br><span style="color:var(--muted);font-size:10px">↳ ${esc(f.reason)}</span>`:''}
+    <span style="float:right;color:var(--muted);font-size:10px">${f.date||''}</span></div>
+  </div>`).join('')}`;
 }
-
-function clearFeedback() {
-  if(confirm('Feedback log wissen?')) {
-    state.feedback = [];
-    localStorage.removeItem('crate_feedback');
-    renderFeedback();
-  }
+async function clearFeedback() {
+  if(!confirm('Feedback log wissen?')) return;
+  state.feedback=[];
+  await persist('crate_feedback',[]);
+  renderFeedback();
 }
 
 // ============================================================
 // NAVIGATION
 // ============================================================
-function showView(id, clickedBtn, bnavId) {
+function showView(id,clickedBtn,bnavId) {
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+id)?.classList.add('active');
-
-  // Sync desktop nav
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  // Sync bottom nav
-  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
-
+  document.querySelectorAll('.nav-btn,.bnav-btn').forEach(b=>b.classList.remove('active'));
   if(clickedBtn) clickedBtn.classList.add('active');
   if(bnavId) document.getElementById(bnavId)?.classList.add('active');
-
-  // Map view id to bnav id
-  const bnavMap = {collection:'bnav-collection',discover:'bnav-discover',profile:'bnav-profile',feedback:'bnav-feedback'};
+  const bnavMap={collection:'bnav-collection',discover:'bnav-discover',profile:'bnav-profile',feedback:'bnav-feedback',playlists:'bnav-playlists'};
   if(bnavMap[id]) document.getElementById(bnavMap[id])?.classList.add('active');
-
   if(id==='profile') renderProfile();
   if(id==='feedback') renderFeedback();
+  if(id==='playlists') renderPlaylists();
   closeFilterDrawer();
-
-  // Scroll to top on mobile
   window.scrollTo(0,0);
 }
 
 function toggleFilterDrawer() {
-  const drawer = document.getElementById('filterDrawer');
-  const overlay = document.getElementById('drawerOverlay');
-  const isOpen = drawer.classList.contains('open');
-  if(isOpen) {
-    drawer.classList.remove('open');
-    overlay.classList.remove('active');
-  } else {
-    // Populate drawer filters if empty
-    if(!document.getElementById('drawerLabelFilters').hasChildNodes()) {
-      populateDrawerFilters();
-    }
-    drawer.classList.add('open');
-    overlay.classList.add('active');
+  const drawer=document.getElementById('filterDrawer');
+  const overlay=document.getElementById('drawerOverlay');
+  const isOpen=drawer.classList.contains('open');
+  if(isOpen){drawer.classList.remove('open');overlay.classList.remove('active');}
+  else {
+    if(!document.getElementById('drawerLabelFilters').hasChildNodes()) populateDrawerFilters();
+    drawer.classList.add('open'); overlay.classList.add('active');
   }
 }
-
 function closeFilterDrawer() {
   document.getElementById('filterDrawer')?.classList.remove('open');
   document.getElementById('drawerOverlay')?.classList.remove('active');
 }
-
 function populateDrawerFilters() {
-  const lc = {};
-  DISCOGS_RAW.forEach(r=>{ const l=r.label.split(',')[0].trim(); lc[l]=(lc[l]||0)+1; });
-  const topLabels = Object.entries(lc).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  const dlf = document.getElementById('drawerLabelFilters');
-  topLabels.forEach(([l,c])=>{
-    const chip = document.createElement('span');
-    chip.className = 'label-chip';
-    chip.innerHTML = (l.length>16?l.slice(0,16)+'…':l)+' <span class="count">'+c+'</span>';
-    chip.onclick = ()=>{ toggleLabelFilter(l,chip); closeFilterDrawer(); };
-    dlf.appendChild(chip);
-  });
-
-  const yearRanges = [['Pre-90','< 1990',r=>r.year<'1990'&&r.year>'1970'],['90-94','1990–94',r=>r.year>='1990'&&r.year<='1994'],['95-99','1995–99',r=>r.year>='1995'&&r.year<='1999'],['00-09','2000s',r=>r.year>='2000'&&r.year<='2009'],['2010s','2010+',r=>r.year>='2010']];
-  const dyf = document.getElementById('drawerYearFilters');
-  yearRanges.forEach(([id,label,fn])=>{
-    const count = DISCOGS_RAW.filter(fn).length;
-    const chip = document.createElement('span');
-    chip.className = 'label-chip';
-    chip.innerHTML = label+' <span class="count">'+count+'</span>';
-    chip.onclick = ()=>{ toggleYearFilter(id,fn,chip); closeFilterDrawer(); };
-    dyf.appendChild(chip);
-  });
+  const lc={};
+  DISCOGS_RAW.forEach(r=>{const l=r.label.split(',')[0].trim();lc[l]=(lc[l]||0)+1;});
+  const topLabels=Object.entries(lc).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const dlf=document.getElementById('drawerLabelFilters');
+  topLabels.forEach(([l,c])=>{const chip=document.createElement('span');chip.className='label-chip';chip.innerHTML=(l.length>16?l.slice(0,16)+'…':l)+' <span class="count">'+c+'</span>';chip.onclick=()=>{toggleLabelFilter(l,chip);closeFilterDrawer();};dlf.appendChild(chip);});
+  const yearRanges=[['Pre-90','< 1990',r=>r.year<'1990'&&r.year>'1970'],['90-94','1990–94',r=>r.year>='1990'&&r.year<='1994'],['95-99','1995–99',r=>r.year>='1995'&&r.year<='1999'],['00-09','2000s',r=>r.year>='2000'&&r.year<='2009'],['2010s','2010+',r=>r.year>='2010']];
+  const dyf=document.getElementById('drawerYearFilters');
+  yearRanges.forEach(([id,label,fn])=>{const count=DISCOGS_RAW.filter(fn).length;const chip=document.createElement('span');chip.className='label-chip';chip.innerHTML=label+' <span class="count">'+count+'</span>';chip.onclick=()=>{toggleYearFilter(id,fn,chip);closeFilterDrawer();};dyf.appendChild(chip);});
 }
 
 // ============================================================
 // UTILS
 // ============================================================
-function esc(str) {
-  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function esc(str){return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 </script>
-<!-- BOTTOM NAV (mobile only) -->
-<nav class="bottom-nav">
-  <div class="bottom-nav-inner">
-    <button class="bnav-btn active" id="bnav-collection" onclick="showView('collection',this,'bnav-collection')">
-      <span class="bnav-icon">🎵</span>COLLECTIE
-    </button>
-    <button class="bnav-btn" id="bnav-discover" onclick="showView('discover',this,'bnav-discover')">
-      <span class="bnav-icon">🔍</span>DISCOVER
-    </button>
-    <button class="bnav-btn" id="bnav-filters" onclick="toggleFilterDrawer()">
-      <span class="bnav-icon">⚙</span>FILTERS
-    </button>
-    <button class="bnav-btn" id="bnav-profile" onclick="showView('profile',this,'bnav-profile')">
-      <span class="bnav-icon">★</span>PROFIEL
-    </button>
-    <button class="bnav-btn" id="bnav-feedback" onclick="showView('feedback',this,'bnav-feedback')">
-      <span class="bnav-icon">📊</span>LOG
-    </button>
-  </div>
-</nav>
-
-<!-- DRAWER OVERLAY -->
-<div class="drawer-overlay" id="drawerOverlay" onclick="closeFilterDrawer()"></div>
-
-<!-- FILTER DRAWER (mobile only) -->
-<div class="filter-drawer" id="filterDrawer">
-  <div class="filter-drawer-header">
-    <div class="filter-drawer-title">FILTERS</div>
-    <button class="drawer-close" onclick="closeFilterDrawer()">✕</button>
-  </div>
-  <div style="padding:16px">
-    <div class="sidebar-title">Stats</div>
-    <div class="stat-row"><span class="stat-label">DJ-Club platen</span><span class="stat-val">264</span></div>
-    <div class="stat-row"><span class="stat-label">Spotify tracks</span><span class="stat-val">588</span></div>
-    <div class="stat-row" style="margin-bottom:16px"><span class="stat-label">Gem. BPM</span><span class="stat-val">127.6</span></div>
-
-    <div class="sidebar-title" style="margin-top:16px">Label</div>
-    <div id="drawerLabelFilters"></div>
-
-    <div class="sidebar-title" style="margin-top:16px">Periode</div>
-    <div id="drawerYearFilters"></div>
-
-    <div class="sidebar-title" style="margin-top:16px">Tags</div>
-    <div>
-      <span class="label-chip" onclick="toggleTagFilter('warmup',this)">Warm-up</span>
-      <span class="label-chip" onclick="toggleTagFilter('peak',this)">Peak</span>
-      <span class="label-chip" onclick="toggleTagFilter('closing',this)">Closing</span>
-      <span class="label-chip" onclick="toggleTagFilter('vinyl',this)">Vinyl</span>
-      <span class="label-chip" onclick="toggleTagFilter('digital',this)">Digitaal</span>
-      <span class="label-chip" onclick="toggleTagFilter('ref',this)">Referentie</span>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
