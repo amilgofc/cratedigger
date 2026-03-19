@@ -1135,15 +1135,30 @@ Als een track niet op Spotify staat, laat spotify_url weg (null).`;
     const res=await fetch(proxyUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:msg}],system:systemPrompt})});
     if(!res.ok){const e=await res.text();throw new Error('Proxy status '+res.status+': '+e.slice(0,200));}
     const data=await res.json();
-    const fullText=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
-    if(!fullText) throw new Error('Leeg antwoord. Controleer API key in Cloudflare.');
+    // Debug: log de volledige response structuur
+    const contentBlocks = data.content || [];
+    const allTypes = contentBlocks.map(b=>b.type).join(', ');
+
+    // Verzamel tekst uit alle blokken (ook tool_result blokken na web search)
+    let fullText = contentBlocks
+      .filter(b => b.type === 'text')
+      .map(b => b.text)
+      .join('\n');
+
+    // Als geen tekst gevonden, check of er een fout in de response zit
+    if(!fullText) {
+      if(data.error) throw new Error('API fout: ' + JSON.stringify(data.error));
+      if(data.type === 'error') throw new Error('API fout type: ' + data.error?.message || JSON.stringify(data));
+      throw new Error(`Leeg antwoord van AI. Content blokken: [${allTypes}]. Stop_reason: ${data.stop_reason}. Controleer je API key in Cloudflare Worker Variables.`);
+    }
+
     let recs=[];
     try {
       const m=fullText.match(/```json\s*([\s\S]*?)```/);
       if(m){recs=JSON.parse(m[1].trim());}
       else{const a=fullText.indexOf('['),z=fullText.lastIndexOf(']');if(a!==-1&&z!==-1)recs=JSON.parse(fullText.slice(a,z+1));}
-    } catch(pe){throw new Error('Parse fout: '+fullText.slice(0,200));}
-    if(!recs.length) throw new Error('Leeg resultaat. Probeer opnieuw.');
+    } catch(pe){throw new Error('Parse fout: '+fullText.slice(0,300));}
+    if(!recs.length) throw new Error('Leeg resultaat. AI tekst was: '+fullText.slice(0,300));
     renderDiscoverResults(recs);
   } catch(e) {
     document.getElementById('discoverResults').innerHTML='<div class="empty-state"><div class="icon">⚠️</div><p>Fout bij proxy.</p><p style="margin-top:8px;font-size:11px;color:var(--text);background:var(--surface2);padding:8px;line-height:1.6">'+e.message+'</p></div>';
