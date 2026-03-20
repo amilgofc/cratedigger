@@ -486,24 +486,36 @@ const SPOTIFY_RAW = [{"id":"6j9cYzBKAUEYNzP3AnhJV9","title":"The Call","artist":
 
 <script>
 // ============================================================
-// PERSISTENT STORAGE — cross-device sync via window.storage
+// PERSISTENT STORAGE
+// Primair: localStorage (altijd beschikbaar, bewaard bij refresh)
+// Secundair: window.storage (Claude artifact omgeving, cross-device)
 // ============================================================
 const DB = {
   async get(key) {
+    // 1. Probeer eerst localStorage (werkt altijd op Netlify)
     try {
-      const r = await window.storage.get(key, true); // shared=true for cross-device
-      return r ? JSON.parse(r.value) : null;
-    } catch(e) { return null; }
+      const v = localStorage.getItem(key);
+      if (v) return JSON.parse(v);
+    } catch(e) {}
+    // 2. Probeer window.storage als fallback (Claude artifact)
+    try {
+      const r = await window.storage.get(key, true);
+      if (r && r.value) {
+        const parsed = JSON.parse(r.value);
+        // Sla ook lokaal op voor volgende keer
+        localStorage.setItem(key, r.value);
+        return parsed;
+      }
+    } catch(e) {}
+    return null;
   },
   async set(key, val) {
-    try {
-      await window.storage.set(key, JSON.stringify(val), true);
-    } catch(e) {
-      // Fallback to localStorage if storage API unavailable
-      localStorage.setItem(key, JSON.stringify(val));
-    }
+    const str = JSON.stringify(val);
+    // 1. Altijd lokaal opslaan
+    try { localStorage.setItem(key, str); } catch(e) {}
+    // 2. Ook in window.storage als beschikbaar (cross-device sync)
+    try { await window.storage.set(key, str, true); } catch(e) {}
   },
-  // Local-only (per-device settings like proxy URL)
   getLocal(key, def=null) {
     try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; }
   },
@@ -540,7 +552,6 @@ let yearFilterFn = null;
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', async () => {
-  setSyncStatus('syncing');
   // Load persisted data
   const [tags, feedback, savedTracks, playlists] = await Promise.all([
     DB.get('crate_tags'),
@@ -571,7 +582,6 @@ function setSyncStatus(s) {
 }
 
 async function persist(key, val) {
-  setSyncStatus('syncing');
   await DB.set(key, val);
   setSyncStatus('synced');
 }
